@@ -1,0 +1,58 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-heading: "Manrope", system-ui, -apple-system, sans-serif;
+  --font-serif: "Playfair Display", Georgia, serif;
+
+  --color-forest: #143727;
+  --color-forest-dark: #0D261B;
+  --color-forest-deep: #081710;
+  --color-forest-hover: #1B4531;
+  --color-forest-light: #235A40;
+  --color-meadow: #2D6A4F;
+  --color-gold: #C89D4B;
+  --color-gold-light: #E0BA6E;
+  --color-gold-dark: #A57D33;
+  --color-charcoal: #151A18;
+  --color-charcoal-muted: #4B554F;
+  --color-ivory: #FBFBFA;
+  --color-warm-gray: #F4F4F0;
+  --color-sand: #ECEAE4;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--color-charcoal);
+  background-color: var(--color-ivory);
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, .font-heading {
+  font-family: var(--font-heading);
+}
+
+.font-serif {
+  font-family: var(--font-serif);
+}
+
+/* Custom scrollbar styling for corporate refinement */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #F4F4F0;
+}
+::-webkit-scrollbar-thumb {
+  background: #C4BFB4;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #143727;
+}
+
