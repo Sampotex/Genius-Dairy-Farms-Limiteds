@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { PartnerModal } from './components/PartnerModal';
@@ -8,12 +7,16 @@ import { AboutPage } from './pages/AboutPage';
 import { OurFarmPage } from './pages/OurFarmPage';
 import { UdderfallPage } from './pages/UdderfallPage';
 import { AcademyPage } from './pages/AcademyPage';
+import { ExcursionsPage } from './pages/ExcursionsPage';
+import { InternshipsPage } from './pages/InternshipsPage';
+import { EventsPage } from './pages/EventsPage';
 import { SustainabilityPage } from './pages/SustainabilityPage';
 import { InsightsPage } from './pages/InsightsPage';
 import { ContactPage } from './pages/ContactPage';
-import { PageId, EnquiryType } from './types';
+import { PageId } from './types';
 import { COMPANY_DETAILS } from './data/companyData';
-import { MessageCircle, Phone, ArrowUp } from 'lucide-react';
+import { MessageCircle, ArrowUp } from 'lucide-react';
+import { AnimatePresence, motion } from 'motion/react';
 import { FounderPhotoProvider } from './context/FounderPhotoContext';
 import { BrandMediaProvider } from './context/BrandMediaContext';
 import { ReplaceMediaModal } from './components/ReplaceMediaModal';
@@ -21,7 +24,6 @@ import { ReplaceMediaModal } from './components/ReplaceMediaModal';
 export default function App() {
   const [currentPage, setCurrentPage] = useState<PageId>('home');
   const [partnerModalOpen, setPartnerModalOpen] = useState<boolean>(false);
-  const [contactEnquiryType, setContactEnquiryType] = useState<EnquiryType | undefined>(undefined);
   const [showBackToTop, setShowBackToTop] = useState(false);
 
   // Scroll listener for back to top button
@@ -33,10 +35,7 @@ export default function App() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleNavigate = (page: PageId, enquiryType?: EnquiryType) => {
-    if (enquiryType) {
-      setContactEnquiryType(enquiryType);
-    }
+  const handleNavigate = (page: PageId) => {
     setCurrentPage(page);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -45,86 +44,88 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const renderCurrentPage = () => {
+    switch (currentPage) {
+      case 'home':
+        return (
+          <HomePage
+            onNavigate={handleNavigate}
+            onOpenPartnerModal={() => setPartnerModalOpen(true)}
+          />
+        );
+      case 'about':
+        return (
+          <AboutPage
+            onNavigate={handleNavigate}
+            onOpenPartnerModal={() => setPartnerModalOpen(true)}
+          />
+        );
+      case 'farm':
+        return (
+          <OurFarmPage
+            onNavigate={handleNavigate}
+            onOpenPartnerModal={() => setPartnerModalOpen(true)}
+          />
+        );
+      case 'udderfall':
+        return <UdderfallPage onNavigate={handleNavigate} />;
+      case 'academy':
+        return <AcademyPage onNavigate={handleNavigate} />;
+      case 'excursions':
+        return <ExcursionsPage onNavigate={handleNavigate} />;
+      case 'internships':
+        return <InternshipsPage onNavigate={handleNavigate} />;
+      case 'events':
+        return <EventsPage onNavigate={handleNavigate} />;
+      case 'sustainability':
+        return (
+          <SustainabilityPage
+            onNavigate={handleNavigate}
+            onOpenPartnerModal={() => setPartnerModalOpen(true)}
+          />
+        );
+      case 'insights':
+        return <InsightsPage onNavigate={handleNavigate} />;
+      case 'contact':
+        return <ContactPage onNavigate={handleNavigate} />;
+      default:
+        return (
+          <HomePage
+            onNavigate={handleNavigate}
+            onOpenPartnerModal={() => setPartnerModalOpen(true)}
+          />
+        );
+    }
+  };
+
   return (
     <FounderPhotoProvider>
       <BrandMediaProvider>
-        <div className="min-h-screen flex flex-col bg-[#FBFBFA] text-[#151A18] font-sans antialiased selection:bg-[#C89D4B]/30 selection:text-[#0D261B]">
-          {/* Header */}
+        <div className="min-h-screen flex flex-col bg-[#FCFCFA] text-[#151A18] font-sans antialiased selection:bg-[#C89D4B]/30 selection:text-[#0D261B]">
+          {/* Header with page routing */}
           <Header
             currentPage={currentPage}
-            onNavigate={(page) => handleNavigate(page)}
+            onNavigate={handleNavigate}
             onOpenPartnerModal={() => setPartnerModalOpen(true)}
           />
 
-          {/* Main Content Area with animated page transitions */}
+          {/* Main Content Area - Renders active page */}
           <main className="flex-1">
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentPage}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
-                className="w-full"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
               >
-                {currentPage === 'home' && (
-                  <HomePage
-                    onNavigate={(page) => handleNavigate(page)}
-                    onOpenPartnerModal={() => setPartnerModalOpen(true)}
-                  />
-                )}
-
-                {currentPage === 'about' && (
-                  <AboutPage
-                    onNavigate={(page) => handleNavigate(page)}
-                    onOpenPartnerModal={() => setPartnerModalOpen(true)}
-                  />
-                )}
-
-                {currentPage === 'farm' && (
-                  <OurFarmPage
-                    onNavigate={(page) => handleNavigate(page)}
-                    onOpenPartnerModal={() => setPartnerModalOpen(true)}
-                  />
-                )}
-
-                {currentPage === 'udderfall' && (
-                  <UdderfallPage
-                    onNavigate={(page) => handleNavigate(page)}
-                  />
-                )}
-
-                {currentPage === 'academy' && (
-                  <AcademyPage
-                    onNavigate={(page) => handleNavigate(page)}
-                  />
-                )}
-
-                {currentPage === 'sustainability' && (
-                  <SustainabilityPage
-                    onNavigate={(page) => handleNavigate(page)}
-                    onOpenPartnerModal={() => setPartnerModalOpen(true)}
-                  />
-                )}
-
-                {currentPage === 'insights' && (
-                  <InsightsPage
-                    onNavigate={(page) => handleNavigate(page)}
-                  />
-                )}
-
-                {currentPage === 'contact' && (
-                  <ContactPage
-                    onNavigate={(page) => handleNavigate(page)}
-                    defaultEnquiryType={contactEnquiryType}
-                  />
-                )}
+                {renderCurrentPage()}
               </motion.div>
             </AnimatePresence>
           </main>
 
           {/* Global Footer */}
-          <Footer onNavigate={(page) => handleNavigate(page)} />
+          <Footer onNavigate={handleNavigate} />
 
           {/* Global Partnership Modal */}
           <PartnerModal
@@ -164,7 +165,7 @@ export default function App() {
             </a>
           </div>
 
-          {/* Global Replace Media & Logo Customizer Modal */}
+          {/* Global Replace Media Modal */}
           <ReplaceMediaModal />
         </div>
       </BrandMediaProvider>

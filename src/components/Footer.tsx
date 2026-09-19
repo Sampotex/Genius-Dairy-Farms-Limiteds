@@ -121,23 +121,20 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             </ul>
           </div>
 
-          {/* Column 3: Our Platforms */}
+          {/* Column 3: Our Platforms & Services */}
           <div className="lg:col-span-3 space-y-4">
             <h4 className="font-heading text-xs uppercase tracking-[0.2em] text-[#C89D4B] font-bold">
-              Our Platforms
+              Platforms &amp; Services
             </h4>
-            <ul className="space-y-3.5 text-sm text-[#A9BCB0]">
+            <ul className="space-y-2.5 text-sm text-[#A9BCB0]">
               <li>
                 <button
                   onClick={() => handleLink('farm')}
                   className="text-left group cursor-pointer"
                 >
-                  <div className="text-white font-medium group-hover:text-[#C89D4B] transition-colors flex items-center gap-1.5">
-                    Genius Dairy Farms
+                  <div className="text-white font-medium group-hover:text-[#C89D4B] transition-colors flex items-center gap-1.5 text-xs">
+                    Commercial Dairy &amp; Ranch
                     <ArrowUpRight className="w-3 h-3 text-[#C89D4B] opacity-0 group-hover:opacity-100 transition-opacity" />
-                  </div>
-                  <div className="text-xs text-[#7B9284]">
-                    Commercial Dairy &amp; Genetics
                   </div>
                 </button>
               </li>
@@ -146,12 +143,9 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                   onClick={() => handleLink('udderfall')}
                   className="text-left group cursor-pointer"
                 >
-                  <div className="text-white font-medium group-hover:text-[#C89D4B] transition-colors flex items-center gap-1.5">
+                  <div className="text-white font-medium group-hover:text-[#C89D4B] transition-colors flex items-center gap-1.5 text-xs">
                     Udderfall Yogurt &amp; Cheese
                     <ArrowUpRight className="w-3 h-3 text-[#C89D4B] opacity-0 group-hover:opacity-100 transition-opacity" />
-                  </div>
-                  <div className="text-xs text-[#7B9284]">
-                    Consumer Dairy Products
                   </div>
                 </button>
               </li>
@@ -160,12 +154,42 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                   onClick={() => handleLink('academy')}
                   className="text-left group cursor-pointer"
                 >
-                  <div className="text-white font-medium group-hover:text-[#C89D4B] transition-colors flex items-center gap-1.5">
-                    Genius Dairy Farm Academy
+                  <div className="text-white font-medium group-hover:text-[#C89D4B] transition-colors flex items-center gap-1.5 text-xs">
+                    Genius Dairy Academy
                     <ArrowUpRight className="w-3 h-3 text-[#C89D4B] opacity-0 group-hover:opacity-100 transition-opacity" />
                   </div>
-                  <div className="text-xs text-[#7B9284]">
-                    Agribusiness Education &amp; Training
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => handleLink('excursions')}
+                  className="text-left group cursor-pointer"
+                >
+                  <div className="text-white font-medium group-hover:text-[#C89D4B] transition-colors flex items-center gap-1.5 text-xs">
+                    Educational Excursions
+                    <ArrowUpRight className="w-3 h-3 text-[#C89D4B] opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </div>
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => handleLink('internships')}
+                  className="text-left group cursor-pointer"
+                >
+                  <div className="text-white font-medium group-hover:text-[#C89D4B] transition-colors flex items-center gap-1.5 text-xs">
+                    Internship &amp; SIWES Portal
+                    <ArrowUpRight className="w-3 h-3 text-[#C89D4B] opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </div>
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => handleLink('events')}
+                  className="text-left group cursor-pointer"
+                >
+                  <div className="text-white font-medium group-hover:text-[#C89D4B] transition-colors flex items-center gap-1.5 text-xs">
+                    Upcoming Events &amp; Field Days
+                    <ArrowUpRight className="w-3 h-3 text-[#C89D4B] opacity-0 group-hover:opacity-100 transition-opacity" />
                   </div>
                 </button>
               </li>

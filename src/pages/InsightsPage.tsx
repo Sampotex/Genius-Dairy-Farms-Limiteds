@@ -71,9 +71,13 @@ export const InsightsPage: React.FC<InsightsPageProps> = ({ onNavigate: _onNavig
     return matchesCategory && matchesSearch;
   });
 
-  // Resolves the current image (either user's uploaded photo or default)
+  // Resolves the current image (defaulting reliably to 1200x794.jpg)
   const getArticleImage = (post: InsightArticle): string => {
-    return customImages[post.id] || post.image || '/1200x794.jpg';
+    const custom = customImages[post.id];
+    if (custom && (custom.startsWith('data:image/') || custom.startsWith('http') || custom.startsWith('/'))) {
+      return custom;
+    }
+    return post.image || '/1200x794.jpg';
   };
 
   return (

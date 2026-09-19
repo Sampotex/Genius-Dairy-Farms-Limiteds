@@ -296,7 +296,7 @@ export const INSIGHTS_POSTS: InsightArticle[] = [
       'Through selective crossbreeding using artificial insemination with proven Holstein Friesian genetics, Genius Dairy Farms developed F1 and upgraded crossbreds that produce between 10 to 15 litres per day under our carefully managed environmental and nutritional regimes.',
       'Crucially, genetic improvement must be matched by high-protein forage, mineral supplementation, clean water ad libitum, and stress-free housing. When genetics and feed science align, commercial dairy in Nigeria becomes an exceptionally viable enterprise.',
     ],
-    image: IMAGES.crossbreedCattle,
+    image: '/1200x794.jpg',
   },
   {
     id: 'silage-pasture-dry-season',
@@ -311,7 +311,7 @@ export const INSIGHTS_POSTS: InsightArticle[] = [
       'At Genius Dairy Farms in Iseyin, we established designated fodder banks featuring high-tonnage grasses and legumes harvested at peak nutritional maturity and preserved in bunker and pit silos.',
       'This guarantees that our milking herd receives consistent total mixed rations regardless of rainfall patterns, keeping yields stable and animals healthy all year round.',
     ],
-    image: IMAGES.pastureManagement,
+    image: '/dairy-barn-aerial.jpg',
   },
   {
     id: 'ddp-frieslandcampina-turning-point',
@@ -326,7 +326,7 @@ export const INSIGHTS_POSTS: InsightArticle[] = [
       'The technical training in hygienic milk handling, cold chain preservation, routine veterinary care, and genetic advancement laid the foundation for our evolution into today’s 60-acre corporate facility.',
       'Public-private collaborations and industry knowledge exchange remain crucial catalysts for scaling sustainable dairy across Nigeria.',
     ],
-    image: IMAGES.founderPortrait,
+    image: '/founder-portrait.jpg',
   },
   {
     id: 'academy-empowering-youth',
@@ -341,7 +341,7 @@ export const INSIGHTS_POSTS: InsightArticle[] = [
       'Through Genius Dairy Farm Academy, our mission is to empower young agropreneurs and animal science students with actual hands-on skills—from handling liquid nitrogen tanks to managing automated milking lines.',
       'When skilled youth enter modern agriculture, productivity expands and sustainable rural economies flourish.',
     ],
-    image: IMAGES.studentGroup,
+    image: '/eagle-view-farm.jpg',
   },
 ];
 

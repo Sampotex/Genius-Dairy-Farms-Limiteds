@@ -6,13 +6,13 @@ import { COMPANY_DETAILS } from '../data/companyData';
 import { Logo } from './Logo';
 
 interface HeaderProps {
-  currentPage: PageId;
-  onNavigate: (page: PageId) => void;
+  currentPage?: PageId;
+  onNavigate?: (page: PageId) => void;
   onOpenPartnerModal: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
-  currentPage,
+  currentPage = 'home',
   onNavigate,
   onOpenPartnerModal,
 }) => {
@@ -23,6 +23,7 @@ export const Header: React.FC<HeaderProps> = ({
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
+
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -40,20 +41,26 @@ export const Header: React.FC<HeaderProps> = ({
 
   const navLinks: { id: PageId; label: string }[] = [
     { id: 'home', label: 'Home' },
-    { id: 'about', label: 'About' },
-    { id: 'farm', label: 'Our Farm' },
-    { id: 'udderfall', label: 'Udderfall' },
+    { id: 'about', label: 'About Us' },
     { id: 'academy', label: 'Academy' },
-    { id: 'sustainability', label: 'Sustainability' },
+    { id: 'excursions', label: 'Excursions' },
+    { id: 'internships', label: 'Internships' },
+    { id: 'events', label: 'Events' },
+    { id: 'udderfall', label: 'Dairy Products' },
+    { id: 'farm', label: 'Farm' },
     { id: 'insights', label: 'Insights' },
     { id: 'contact', label: 'Contact' },
   ];
 
-  const handleNavClick = (page: PageId) => {
-    onNavigate(page);
+  const handleNavClick = (pageId: PageId) => {
     setMobileMenuOpen(false);
+    if (onNavigate) {
+      onNavigate(pageId);
+    }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
+
+  const currentActive = currentPage;
 
   return (
     <header
@@ -105,7 +112,7 @@ export const Header: React.FC<HeaderProps> = ({
           <div className="flex items-center gap-3">
             <div
               className="cursor-pointer transition-transform hover:scale-103"
-              title="Genius Dairy Farms - Return to Home"
+              title="Genius Dairy Farms - Return to Top"
             >
               <Logo
                 size="sm"
@@ -131,16 +138,16 @@ export const Header: React.FC<HeaderProps> = ({
           {/* Desktop Navigation Links */}
           <nav
             id="desktop-nav-menu"
-            className="hidden lg:flex items-center gap-1 xl:gap-1.5"
+            className="hidden lg:flex items-center gap-0.5 xl:gap-1"
           >
             {navLinks.map((link) => {
-              const isActive = currentPage === link.id;
+              const isActive = currentActive === link.id;
               return (
                 <button
                   key={link.id}
                   id={`nav-link-${link.id}`}
                   onClick={() => handleNavClick(link.id)}
-                  className={`relative px-3.5 py-2 text-[13.5px] font-medium tracking-normal transition-all duration-200 cursor-pointer rounded-full ${
+                  className={`relative px-2.5 xl:px-3 py-1.5 text-[12.5px] xl:text-[13px] font-medium tracking-normal transition-all duration-200 cursor-pointer rounded-full whitespace-nowrap ${
                     isActive
                       ? 'text-[#143727] font-bold bg-[#143727]/8'
                       : 'text-[#4A554F] hover:text-[#143727] hover:bg-[#F4F3EE]'
@@ -150,7 +157,7 @@ export const Header: React.FC<HeaderProps> = ({
                   {isActive && (
                     <motion.span
                       layoutId="activeNavIndicator"
-                      className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-[#C89D4B] rounded-full"
+                      className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-[#C89D4B] rounded-full"
                       transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                     />
                   )}
@@ -209,7 +216,7 @@ export const Header: React.FC<HeaderProps> = ({
           >
             <div className="space-y-1 mb-5">
               {navLinks.map((link) => {
-                const isActive = currentPage === link.id;
+                const isActive = currentActive === link.id;
                 return (
                   <button
                     key={link.id}
@@ -250,29 +257,18 @@ export const Header: React.FC<HeaderProps> = ({
                   href={COMPANY_DETAILS.whatsappUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-1.5 py-2.5 px-3 bg-[#25D366]/10 text-[#1B7F43] rounded-xl text-xs font-bold"
+                  className="flex items-center justify-center gap-1.5 px-3 py-2.5 bg-[#25D366]/10 hover:bg-[#25D366]/20 text-[#128C7E] rounded-xl text-xs font-bold border border-[#25D366]/20"
                 >
                   <MessageCircle className="w-3.5 h-3.5" />
                   <span>WhatsApp</span>
                 </a>
                 <a
                   href={COMPANY_DETAILS.phoneTel}
-                  className="flex items-center justify-center gap-1.5 py-2.5 px-3 bg-[#143727]/10 text-[#143727] rounded-xl text-xs font-bold"
+                  className="flex items-center justify-center gap-1.5 px-3 py-2.5 bg-[#143727]/5 hover:bg-[#143727]/10 text-[#143727] rounded-xl text-xs font-bold border border-[#143727]/10"
                 >
-                  <Phone className="w-3.5 h-3.5" />
-                  <span>Call Us</span>
+                  <Phone className="w-3.5 h-3.5 text-[#C89D4B]" />
+                  <span>Call Direct</span>
                 </a>
-              </div>
-
-              <div className="text-[11px] text-[#667069] pt-2 space-y-1">
-                <p className="flex items-start gap-1.5">
-                  <MapPin className="w-3.5 h-3.5 text-[#C89D4B] shrink-0 mt-0.5" />
-                  <span>{COMPANY_DETAILS.address}</span>
-                </p>
-                <p className="flex items-center gap-1.5">
-                  <Mail className="w-3.5 h-3.5 text-[#C89D4B] shrink-0" />
-                  <span>{COMPANY_DETAILS.email}</span>
-                </p>
               </div>
             </div>
           </motion.div>
@@ -281,4 +277,3 @@ export const Header: React.FC<HeaderProps> = ({
     </header>
   );
 };
-

@@ -72,9 +72,15 @@ export const AcademyPage: React.FC<AcademyPageProps> = ({ onNavigate }) => {
             <div className="flex items-center gap-3 p-1.5 pr-4 bg-[#163B29]/90 border border-[#C89D4B]/40 rounded-full shadow-md backdrop-blur-md">
               <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-white p-1 shadow-xs overflow-hidden flex items-center justify-center shrink-0">
                 <img
-                  src={images.academyLogo}
+                  src={images.academyLogo || '/academy-logo.jpg'}
                   alt="Genius Dairy Academy Logo"
                   referrerPolicy="no-referrer"
+                  onError={(e) => {
+                    const target = e.currentTarget;
+                    if (!target.src.endsWith('/academy-logo.jpg') && !target.src.endsWith('/genius-academy-logo.jpg')) {
+                      target.src = '/academy-logo.jpg';
+                    }
+                  }}
                   className="w-full h-full object-contain"
                 />
               </div>
@@ -122,22 +128,28 @@ export const AcademyPage: React.FC<AcademyPageProps> = ({ onNavigate }) => {
               </div>
 
               {/* Action Buttons */}
-              <div className="flex flex-wrap items-center gap-4 pt-4">
+              <div className="flex flex-wrap items-center gap-3 pt-4">
                 <button
                   onClick={() => {
                     setSelectedCourse(ACADEMY_PROGRAMS[0].title);
                     setEnrollModalOpen(true);
                   }}
-                  className="px-8 py-4 bg-[#C89D4B] hover:bg-[#D9AC59] text-[#081710] text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow-lg hover:shadow-xl hover:scale-[1.02] cursor-pointer flex items-center gap-2"
+                  className="px-7 py-3.5 bg-[#C89D4B] hover:bg-[#D9AC59] text-[#081710] text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow-lg hover:shadow-xl hover:scale-[1.02] cursor-pointer flex items-center gap-2"
                 >
-                  <span>Apply for Upcoming Cohort</span>
+                  <span>Apply for Academy Course</span>
                   <ArrowRight className="w-4 h-4 text-[#081710]" />
                 </button>
                 <button
-                  onClick={() => onNavigate('contact')}
-                  className="px-8 py-4 bg-white/10 hover:bg-white/15 text-white border border-white/20 text-xs font-semibold uppercase tracking-wider rounded-xl transition-all hover:scale-[1.02] cursor-pointer"
+                  onClick={() => onNavigate('internships')}
+                  className="px-7 py-3.5 bg-white/10 hover:bg-white/15 text-white border border-white/20 text-xs font-semibold uppercase tracking-wider rounded-xl transition-all hover:scale-[1.02] cursor-pointer"
                 >
-                  Institutional &amp; Student Visits
+                  Apply for SIWES / Internship
+                </button>
+                <button
+                  onClick={() => onNavigate('excursions')}
+                  className="px-7 py-3.5 bg-white/10 hover:bg-white/15 text-white border border-white/20 text-xs font-semibold uppercase tracking-wider rounded-xl transition-all hover:scale-[1.02] cursor-pointer"
+                >
+                  Book School Excursion
                 </button>
               </div>
             </div>
@@ -154,9 +166,15 @@ export const AcademyPage: React.FC<AcademyPageProps> = ({ onNavigate }) => {
                     className="w-36 h-36 sm:w-44 sm:h-44 mx-auto rounded-full bg-white p-3 shadow-inner border-4 border-[#C89D4B]/50 flex items-center justify-center overflow-hidden group-hover:scale-103 transition-transform"
                   >
                     <img
-                      src={images.academyLogo}
+                      src={images.academyLogo || '/academy-logo.jpg'}
                       alt="Genius Dairy Academy Official Logo"
                       referrerPolicy="no-referrer"
+                      onError={(e) => {
+                        const target = e.currentTarget;
+                        if (!target.src.endsWith('/academy-logo.jpg') && !target.src.endsWith('/genius-academy-logo.jpg')) {
+                          target.src = '/academy-logo.jpg';
+                        }
+                      }}
                       className="w-full h-full object-contain"
                     />
                   </div>

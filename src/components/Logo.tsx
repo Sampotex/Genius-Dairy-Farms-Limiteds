@@ -73,10 +73,19 @@ export const Logo: React.FC<LogoProps> = ({
         >
           {!imageError ? (
             <img
-              src={logoUrl}
+              src={logoUrl || '/logo.jpg'}
               alt="Genius Dairy Farms Limited Official Logo"
               className="w-full h-full object-cover rounded-full"
-              onError={() => setImageError(true)}
+              onError={(e) => {
+                const target = e.currentTarget;
+                if (!target.src.endsWith('/logo.jpg') && !target.src.endsWith('/genius-dairy-logo.jpg')) {
+                  target.src = '/logo.jpg';
+                } else if (target.src.endsWith('/logo.jpg') && !target.src.endsWith('/genius-dairy-logo.jpg')) {
+                  target.src = '/genius-dairy-logo.jpg';
+                } else {
+                  setImageError(true);
+                }
+              }}
               referrerPolicy="no-referrer"
             />
           ) : (

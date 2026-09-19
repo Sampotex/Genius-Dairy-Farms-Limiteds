@@ -10,7 +10,10 @@ import { ACADEMY_LOGO_BASE64 } from './academyLogoFallback';
 
 export const IMAGES = {
   // Brand & Identity
-  academyLogo: ACADEMY_LOGO_BASE64, // Official Genius Dairy Farms Academy circular emblem logo
+  logo: '/logo.jpg', // Official Genius Dairy Farms Limited circular emblem logo
+  geniusDairyLogo: '/genius-dairy-logo.jpg',
+  academyLogo: '/academy-logo.jpg', // Official Genius Dairy Farms Academy circular emblem logo
+  academyLogoFallback: ACADEMY_LOGO_BASE64,
 
   // Hero & Overview
   heroDairyCattle:

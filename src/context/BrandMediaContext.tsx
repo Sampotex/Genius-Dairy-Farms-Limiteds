@@ -86,7 +86,7 @@ export const MEDIA_SLOTS: Record<string, MediaSlotDefinition> = {
     name: 'Official Company Logo',
     shortLabel: 'Company Logo',
     category: 'Brand & Identity',
-    defaultUrl: '/genius-dairy-logo.jpg',
+    defaultUrl: '/logo.jpg',
     aspectRatioLabel: '1:1 Square / Circle',
     description: 'The circular registered emblem of Genius Dairy Farms Limited.',
     locationUsed: 'Header navigation, footer, partner modals, certification badges, and official documents.',
@@ -97,7 +97,7 @@ export const MEDIA_SLOTS: Record<string, MediaSlotDefinition> = {
     name: 'Genius Dairy Farm Academy Official Logo',
     shortLabel: 'Academy Logo',
     category: 'Brand & Identity',
-    defaultUrl: ACADEMY_LOGO_BASE64,
+    defaultUrl: '/academy-logo.jpg',
     aspectRatioLabel: '1:1 Square / Circle',
     description: 'The official circular crest of Genius Dairy Farm Academy featuring the dairy herd, milk vessel, and motto Learn • Grow • Lead.',
     locationUsed: 'Top of Genius Dairy Farm Academy section, Academy header, and training accreditation.',
@@ -489,10 +489,14 @@ export const GALLERY_ID_TO_SLOT: Record<string, string> = {
 };
 
 export const DEFAULT_URL_TO_SLOT: Record<string, string> = {
+  '/logo.jpg': 'logo',
   '/genius-dairy-logo.jpg': 'logo',
+  '/academy-logo.jpg': 'academyLogo',
+  '/genius-academy-logo.jpg': 'academyLogo',
   '/founder.jpg': 'founder',
   '/eagle-view-farm.jpg': 'eagleViewFarm',
   '/dairy-barn-aerial.jpg': 'dairyBarnAerial',
+  '/1200x794.jpg': 'crossbreedCattle',
 };
 
 Object.entries(MEDIA_SLOTS).forEach(([slotKey, def]) => {
@@ -767,7 +771,7 @@ export const BrandMediaProvider: React.FC<{ children: ReactNode }> = ({ children
    */
   const getImage = useCallback(
     (slotOrKey: string): string => {
-      if (!slotOrKey) return '/genius-dairy-logo.jpg';
+      if (!slotOrKey) return '/logo.jpg';
       const canonical = resolveKey(slotOrKey);
       if (urls[canonical]) {
         return urls[canonical];

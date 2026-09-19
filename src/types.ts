@@ -4,6 +4,9 @@ export type PageId =
   | 'farm'
   | 'udderfall'
   | 'academy'
+  | 'excursions'
+  | 'internships'
+  | 'events'
   | 'sustainability'
   | 'insights'
   | 'contact';
