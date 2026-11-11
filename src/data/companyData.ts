@@ -296,7 +296,7 @@ export const INSIGHTS_POSTS: InsightArticle[] = [
       'Through selective crossbreeding using artificial insemination with proven Holstein Friesian genetics, Genius Dairy Farms developed F1 and upgraded crossbreds that produce between 10 to 15 litres per day under our carefully managed environmental and nutritional regimes.',
       'Crucially, genetic improvement must be matched by high-protein forage, mineral supplementation, clean water ad libitum, and stress-free housing. When genetics and feed science align, commercial dairy in Nigeria becomes an exceptionally viable enterprise.',
     ],
-    image: '/1200x794.jpg',
+    image: '/insight-yield-transformation.jpg',
   },
   {
     id: 'silage-pasture-dry-season',
@@ -311,7 +311,7 @@ export const INSIGHTS_POSTS: InsightArticle[] = [
       'At Genius Dairy Farms in Iseyin, we established designated fodder banks featuring high-tonnage grasses and legumes harvested at peak nutritional maturity and preserved in bunker and pit silos.',
       'This guarantees that our milking herd receives consistent total mixed rations regardless of rainfall patterns, keeping yields stable and animals healthy all year round.',
     ],
-    image: '/dairy-barn-aerial.jpg',
+    image: '/insight-silage-pasture.jpg',
   },
   {
     id: 'ddp-frieslandcampina-turning-point',
@@ -326,7 +326,7 @@ export const INSIGHTS_POSTS: InsightArticle[] = [
       'The technical training in hygienic milk handling, cold chain preservation, routine veterinary care, and genetic advancement laid the foundation for our evolution into today’s 60-acre corporate facility.',
       'Public-private collaborations and industry knowledge exchange remain crucial catalysts for scaling sustainable dairy across Nigeria.',
     ],
-    image: '/founder-portrait.jpg',
+    image: '/insight-ddp-milestone.jpg',
   },
   {
     id: 'academy-empowering-youth',
@@ -341,7 +341,22 @@ export const INSIGHTS_POSTS: InsightArticle[] = [
       'Through Genius Dairy Farm Academy, our mission is to empower young agropreneurs and animal science students with actual hands-on skills—from handling liquid nitrogen tanks to managing automated milking lines.',
       'When skilled youth enter modern agriculture, productivity expands and sustainable rural economies flourish.',
     ],
-    image: '/eagle-view-farm.jpg',
+    image: '/insight-youth-education.jpg',
+  },
+  {
+    id: 'nigeria-dairy-policy',
+    title: 'Nigeria National Dairy Policy: Catalyzing Backward Integration & Local Sourcing',
+    category: 'Industry News',
+    date: 'March 2026',
+    readTime: '5 min read',
+    excerpt:
+      'Analyzing the national policy shift toward domestic raw milk sourcing, tariff incentives on local processing, and private sector investments across Southwest Nigeria.',
+    content: [
+      'The Federal Ministry of Agriculture and Rural Development (FMARD) formulated the National Dairy Policy to provide clear regulatory frameworks for modernizing Nigerian dairy production.',
+      'Key pillars include incentivizing local raw milk aggregation centers, encouraging off-grid solar chilling infrastructure, and supporting commercial ranches that practice intensive pasture development.',
+      'Genius Dairy Farms actively aligns with these strategic national targets, demonstrating that commercial dairy operators in Oyo State can supply food-grade raw milk that meets strict international dairy standards.',
+    ],
+    image: '/insight-dairy-policy.jpg',
   },
 ];
 

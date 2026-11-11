@@ -90,9 +90,11 @@ export function FounderPhotoProvider({ children }: { children: ReactNode }) {
     try {
       const savedImage = localStorage.getItem(STORAGE_KEY);
       const savedPosition = localStorage.getItem(POSITION_KEY);
-      if (savedImage && savedImage.trim().length > 0) {
+      if (savedImage && savedImage.trim().length > 0 && !savedImage.includes('1200x794') && !savedImage.includes('founder_md') && savedImage.length < 850000) {
         setPhotoUrl(savedImage);
         setIsCustom(true);
+      } else {
+        setPhotoUrl('/founder.jpg');
       }
       if (savedPosition) {
         setObjectPositionState(savedPosition);
@@ -178,10 +180,22 @@ export function FounderPhotoProvider({ children }: { children: ReactNode }) {
   );
 }
 
+const defaultFounderPhotoContext: FounderPhotoContextType = {
+  photoUrl: DEFAULT_FOUNDER_IMAGE,
+  isCustom: false,
+  isUploading: false,
+  uploadError: null,
+  objectPosition: 'center 15%',
+  setObjectPosition: () => {},
+  uploadFromGallery: async () => false,
+  setPhotoFromUrl: () => {},
+  resetToDefault: () => {},
+};
+
 export function useFounderPhoto(): FounderPhotoContextType {
   const context = useContext(FounderPhotoContext);
   if (!context) {
-    throw new Error('useFounderPhoto must be used within a FounderPhotoProvider');
+    return defaultFounderPhotoContext;
   }
   return context;
 }

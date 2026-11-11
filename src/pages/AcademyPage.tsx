@@ -22,6 +22,7 @@ import { PageId, AcademyProgram } from '../types';
 import { ACADEMY_PROGRAMS, COMPANY_DETAILS } from '../data/companyData';
 import { useSiteImages } from '../context/BrandMediaContext';
 import { CacRegistrationSection } from '../components/CacRegistrationSection';
+import { ACADEMY_LOGO_BASE64 } from '../data/academyLogoFallback';
 
 interface AcademyPageProps {
   onNavigate: (page: PageId) => void;
@@ -73,20 +74,18 @@ export const AcademyPage: React.FC<AcademyPageProps> = ({ onNavigate }) => {
               <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-white p-1 shadow-xs overflow-hidden flex items-center justify-center shrink-0">
                 <img
                   src={images.academyLogo || '/academy-logo.jpg'}
-                  alt="Genius Dairy Academy Logo"
+                  alt="Genius Dairy Academy Limited Logo"
                   referrerPolicy="no-referrer"
                   onError={(e) => {
                     const target = e.currentTarget;
-                    if (!target.src.endsWith('/academy-logo.jpg') && !target.src.endsWith('/genius-academy-logo.jpg')) {
-                      target.src = '/academy-logo.jpg';
-                    }
+                    target.src = ACADEMY_LOGO_BASE64;
                   }}
                   className="w-full h-full object-contain"
                 />
               </div>
               <div className="text-left">
                 <span className="text-[11px] sm:text-xs font-bold uppercase tracking-widest text-[#C89D4B] block leading-tight">
-                  Genius Dairy Academy
+                  Genius Dairy Academy Limited
                 </span>
                 <span className="text-[10px] text-[#A8C5B5] block leading-tight font-medium">
                   Official Registered Crest • RC: 8888771
@@ -105,7 +104,7 @@ export const AcademyPage: React.FC<AcademyPageProps> = ({ onNavigate }) => {
             {/* Left Content Column */}
             <div className="lg:col-span-7 xl:col-span-8 space-y-6">
               <h1 className="font-heading text-3xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-tight">
-                Genius Dairy <span className="font-serif italic text-[#C89D4B] font-normal">Farm Academy</span>
+                Genius Dairy <span className="font-serif italic text-[#C89D4B] font-normal">Academy Limited</span>
               </h1>
               <p className="text-base sm:text-xl text-[#CBDDD2] max-w-2xl leading-relaxed font-normal">
                 Knowledge. Skills. Opportunity. Bridging the agricultural talent gap in West Africa through immersive, hands-on dairy and livestock business education on our 60-acre commercial farm complex.
@@ -167,13 +166,11 @@ export const AcademyPage: React.FC<AcademyPageProps> = ({ onNavigate }) => {
                   >
                     <img
                       src={images.academyLogo || '/academy-logo.jpg'}
-                      alt="Genius Dairy Academy Official Logo"
+                      alt="Genius Dairy Academy Limited Official Logo"
                       referrerPolicy="no-referrer"
                       onError={(e) => {
                         const target = e.currentTarget;
-                        if (!target.src.endsWith('/academy-logo.jpg') && !target.src.endsWith('/genius-academy-logo.jpg')) {
-                          target.src = '/academy-logo.jpg';
-                        }
+                        target.src = ACADEMY_LOGO_BASE64;
                       }}
                       className="w-full h-full object-contain"
                     />
@@ -181,7 +178,7 @@ export const AcademyPage: React.FC<AcademyPageProps> = ({ onNavigate }) => {
 
                   <div>
                     <h3 className="font-heading font-bold text-lg text-white tracking-wide uppercase">
-                      Genius Dairy Academy
+                      Genius Dairy Academy Limited
                     </h3>
                     <p className="text-xs font-bold uppercase tracking-widest text-[#C89D4B] mt-1">
                       Learn • Grow • Lead
@@ -252,12 +249,36 @@ export const AcademyPage: React.FC<AcademyPageProps> = ({ onNavigate }) => {
             </div>
 
             <div className="lg:col-span-6">
-              <div className="relative rounded-3xl overflow-hidden border border-[#D5D1C4] shadow-lg group/student">
-                <img
-                  src={images.studentGroup}
-                  alt="Students learning at Genius Dairy Farm Academy"
-                  className="w-full h-[480px] object-cover hover:scale-102 transition-transform duration-700"
-                />
+              <div className="relative rounded-3xl overflow-hidden border border-[#C89D4B]/30 shadow-2xl bg-gradient-to-br from-[#06180E] via-[#0E2C1E] to-[#081810] p-8 sm:p-12 flex flex-col items-center justify-center text-center group">
+                <div className="absolute inset-0 bg-[radial-gradient(#C89D4B_1px,transparent_1px)] [background-size:24px_24px] opacity-15 pointer-events-none" />
+                <div className="relative z-10 space-y-6">
+                  <div className="w-48 h-48 sm:w-56 sm:h-56 mx-auto rounded-full bg-white p-3 shadow-2xl border-4 border-[#C89D4B]/60 flex items-center justify-center overflow-hidden group-hover:scale-105 transition-transform duration-500">
+                    <img
+                      src={images.academyLogo || '/academy-logo.jpg'}
+                      alt="Genius Dairy Academy Limited Official Logo"
+                      referrerPolicy="no-referrer"
+                      onError={(e) => {
+                        e.currentTarget.src = ACADEMY_LOGO_BASE64;
+                      }}
+                      className="w-full h-full object-contain"
+                    />
+                  </div>
+                  <div>
+                    <h3 className="font-heading font-extrabold text-2xl text-white tracking-wide uppercase">
+                      Genius Dairy Academy Limited
+                    </h3>
+                    <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#C89D4B] mt-1.5">
+                      Learn • Grow • Lead
+                    </p>
+                    <p className="text-xs text-[#CBDDD2] max-w-sm mx-auto mt-2 leading-relaxed">
+                      Accredited agricultural education, bovine genetics, and practical livestock capacity building (RC: 8888771).
+                    </p>
+                  </div>
+                  <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#143727] text-[#C89D4B] text-xs font-bold rounded-full border border-[#C89D4B]/40">
+                    <ShieldCheck className="w-3.5 h-3.5" />
+                    <span>Official Institutional Crest</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -272,12 +293,27 @@ export const AcademyPage: React.FC<AcademyPageProps> = ({ onNavigate }) => {
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header */}
           <div className="max-w-3xl mb-14">
-            <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#143727]/10 text-[#143727] text-xs font-bold uppercase tracking-[0.2em] rounded-full mb-3">
-              <Lightbulb className="w-4 h-4 text-[#C89D4B]" />
-              <span>Vision &amp; Strategic Purpose</span>
+            <div className="flex flex-wrap items-center gap-3 mb-4">
+              <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#143727]/10 text-[#143727] text-xs font-bold uppercase tracking-[0.2em] rounded-full">
+                <Lightbulb className="w-4 h-4 text-[#C89D4B]" />
+                <span>Vision &amp; Strategic Purpose</span>
+              </div>
+              <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#FAF9F5] border border-[#E0DDD5] rounded-full text-xs font-semibold text-[#143727]">
+                <div className="w-4 h-4 rounded-full overflow-hidden bg-white shrink-0">
+                  <img
+                    src={images.academyLogo || '/academy-logo.jpg'}
+                    alt="Genius Dairy Academy Limited Crest"
+                    onError={(e) => {
+                      e.currentTarget.src = ACADEMY_LOGO_BASE64;
+                    }}
+                    className="w-full h-full object-contain"
+                  />
+                </div>
+                <span>Genius Dairy Academy Limited (RC: 8888771)</span>
+              </div>
             </div>
             <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#151A18] tracking-tight leading-tight">
-              Why We Are Bringing Genius Dairy Academy <span className="font-serif italic text-[#143727] font-normal">on Board</span>
+              Why We Are Bringing Genius Dairy Academy Limited <span className="font-serif italic text-[#143727] font-normal">on Board</span>
             </h2>
             <p className="mt-4 text-base sm:text-lg text-[#4A554F] leading-relaxed">
               Addressing the critical human capacity gap to safeguard livestock investments and build lasting agricultural enterprises.
@@ -295,7 +331,7 @@ export const AcademyPage: React.FC<AcademyPageProps> = ({ onNavigate }) => {
                   The 2-to-5-Year Livestock Sustainability Challenge
                 </h3>
                 <p className="text-base text-[#4A554F] leading-relaxed">
-                  The reason we are establishing the Genius Dairy Academy is based on an important challenge we have observed in the livestock sector. Many people are investing in improved genetics of indigenous animals, importing quality breeds, developing pastures and establishing modern farms. However, after two to five years, some of these farms eventually fold up or become unproductive due to poor management, inadequate technical capacity and lack of continuity.
+                  The reason we are establishing Genius Dairy Academy Limited is based on an important challenge we have observed in the livestock sector. Many people are investing in improved genetics of indigenous animals, importing quality breeds, developing pastures and establishing modern farms. However, after two to five years, some of these farms eventually fold up or become unproductive due to poor management, inadequate technical capacity and lack of continuity.
                 </p>
               </div>
             </div>
@@ -340,7 +376,7 @@ export const AcademyPage: React.FC<AcademyPageProps> = ({ onNavigate }) => {
                   Deliberate Leadership Development
                 </h4>
                 <p className="text-sm sm:text-base text-[#4A554F] leading-relaxed mb-6">
-                  The Genius Dairy Academy is designed to build on this approach by deliberately identifying, training and developing young people into competent livestock and dairy farm managers, entrepreneurs and future industry leaders.
+                  Genius Dairy Academy Limited is designed to build on this approach by deliberately identifying, training and developing young people into competent livestock and dairy farm managers, entrepreneurs and future industry leaders.
                 </p>
               </div>
               <div className="pt-5 border-t border-[#EAE7DE] flex items-center gap-2.5 text-xs font-bold text-[#2D6A4F]">

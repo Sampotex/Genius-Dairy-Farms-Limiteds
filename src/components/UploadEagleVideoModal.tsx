@@ -14,12 +14,17 @@ import {
   FileVideo,
   Image as ImageIcon,
   Info,
+  HardDrive,
+  Cloud,
+  ShieldCheck,
 } from 'lucide-react';
 import {
   saveDroneVideoFile,
   saveDroneVideoUrl,
   loadDroneVideo,
   resetDroneVideo,
+  syncLocalCustomVideoToServer,
+  checkServerDroneVideo,
   DroneVideoMeta,
   DEFAULT_DRONE_VIDEO,
 } from '../utils/droneVideoStorage';
@@ -44,6 +49,11 @@ export const UploadEagleVideoModal: React.FC<UploadEagleVideoModalProps> = ({
   const [currentMeta, setCurrentMeta] = useState<DroneVideoMeta | null>(null);
   const [isCurrentCustomVideo, setIsCurrentCustomVideo] = useState<boolean>(false);
   const [currentVideoUrl, setCurrentVideoUrl] = useState<string>(DEFAULT_DRONE_VIDEO);
+  const [serverVideoStatus, setServerVideoStatus] = useState<{
+    exists: boolean;
+    sizeFormatted?: string;
+    updatedAt?: string;
+  }>({ exists: false });
 
   // Staging state
   const [stagedFile, setStagedFile] = useState<File | null>(null);
@@ -74,6 +84,10 @@ export const UploadEagleVideoModal: React.FC<UploadEagleVideoModalProps> = ({
       setCurrentMeta(meta);
     }).catch(() => {
       // Handled silently
+    });
+
+    checkServerDroneVideo().then((status) => {
+      setServerVideoStatus(status);
     });
 
     setStagedFile(null);
@@ -177,17 +191,25 @@ export const UploadEagleVideoModal: React.FC<UploadEagleVideoModalProps> = ({
           onClose();
         }, 1600);
       } else {
-        // Save as Eagle View custom drone video
+        // Save as Eagle View custom drone video directly to permanent server disk
         const result = await saveDroneVideoFile(stagedFile);
         setIsCurrentCustomVideo(true);
         setCurrentMeta(result.meta);
         setCurrentVideoUrl(result.url);
-        setSuccessMessage('✓ Drone video saved! It is now playing live in the Eagle View section.');
+
+        const checkStatus = await checkServerDroneVideo();
+        setServerVideoStatus(checkStatus);
+
+        setSuccessMessage(
+          result.meta.savedToServer
+            ? '✓ Drone video saved directly to public folder (public/eagle-view-farm.mp4)! It is now active across all devices, sessions, and visitors.'
+            : '✓ Drone video saved to public folder and playing in Eagle View!'
+        );
         onVideoUploaded?.(result.url);
 
         setTimeout(() => {
           onClose();
-        }, 1600);
+        }, 1800);
       }
     } catch (err) {
       setErrorMessage(err instanceof Error ? err.message : 'Could not save file. Please try again.');
@@ -219,6 +241,29 @@ export const UploadEagleVideoModal: React.FC<UploadEagleVideoModalProps> = ({
       }, 1600);
     } catch (err) {
       setErrorMessage(err instanceof Error ? err.message : 'Could not save video URL.');
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  const handleSyncToServerPermanent = async () => {
+    setIsProcessing(true);
+    setErrorMessage(null);
+    setSuccessMessage(null);
+    try {
+      const result = await syncLocalCustomVideoToServer();
+      if (result.synced && result.meta) {
+        setCurrentMeta(result.meta);
+        const checkStatus = await checkServerDroneVideo();
+        setServerVideoStatus(checkStatus);
+        setSuccessMessage('✓ Drone video is now permanently stored on the server disk (public/eagle-view-farm.mp4)!');
+      } else {
+        const checkStatus = await checkServerDroneVideo();
+        setServerVideoStatus(checkStatus);
+        setSuccessMessage('✓ Video is already permanently active on the server filesystem.');
+      }
+    } catch {
+      setErrorMessage('Could not sync video to server disk. Please re-upload the file directly.');
     } finally {
       setIsProcessing(false);
     }
@@ -303,18 +348,43 @@ export const UploadEagleVideoModal: React.FC<UploadEagleVideoModalProps> = ({
 
         {/* Current Media Status Bar */}
         <div className="px-5 sm:px-6 py-3 bg-[#132C1F] border-b border-[#1E4D38] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
-          <div className="space-y-1">
-            <div className="flex items-center gap-2">
+          <div className="space-y-1.5">
+            <div className="flex flex-wrap items-center gap-2">
               <span className="text-[#9BB0A3]">Active Video:</span>
               {isCurrentCustomVideo ? (
-                <span className="inline-flex items-center gap-1.5 px-2 py-0.5 bg-[#C89D4B]/20 text-[#C89D4B] border border-[#C89D4B]/40 rounded-xs font-semibold">
-                  <Sparkles className="w-3 h-3" />
-                  <span>Custom Video ({currentMeta?.name || 'Uploaded'})</span>
-                  {currentMeta?.size ? ` • ${formatFileSize(currentMeta.size)}` : ''}
-                </span>
+                <div className="inline-flex flex-wrap items-center gap-1.5">
+                  <span className="inline-flex items-center gap-1.5 px-2 py-0.5 bg-[#C89D4B]/20 text-[#C89D4B] border border-[#C89D4B]/40 rounded-xs font-semibold">
+                    <Sparkles className="w-3 h-3" />
+                    <span>Custom Video ({currentMeta?.name || 'Uploaded'})</span>
+                    {currentMeta?.size ? ` • ${formatFileSize(currentMeta.size)}` : ''}
+                  </span>
+
+                  {currentMeta?.savedToServer ? (
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-emerald-950 text-emerald-300 border border-emerald-500/50 rounded-xs font-bold text-[10px]">
+                      <HardDrive className="w-3 h-3 text-emerald-400" />
+                      <span>Permanent on Server Disk</span>
+                    </span>
+                  ) : (
+                    <button
+                      type="button"
+                      disabled={isProcessing}
+                      onClick={handleSyncToServerPermanent}
+                      className="inline-flex items-center gap-1 px-2 py-0.5 bg-[#C89D4B] hover:bg-[#B38938] text-[#0D261B] rounded-xs font-bold text-[10px] transition-colors cursor-pointer shadow-sm"
+                      title="Write this custom video permanently to the server disk"
+                    >
+                      <Cloud className="w-3 h-3" />
+                      <span>Save Permanently to Server</span>
+                    </button>
+                  )}
+                </div>
               ) : (
-                <span className="text-[#CBDDD2] font-medium">
-                  Default 4K Farm Tour (/eagle-view-farm.mp4)
+                <span className="text-[#CBDDD2] font-medium flex items-center gap-1.5">
+                  <span>Farm Tour (/eagle-view-farm.mp4)</span>
+                  {serverVideoStatus.sizeFormatted && (
+                    <span className="px-1.5 py-0.2 bg-white/10 text-[10px] font-mono rounded-xs text-[#9BB0A3]">
+                      {serverVideoStatus.sizeFormatted} • Permanent
+                    </span>
+                  )}
                 </span>
               )}
             </div>
@@ -524,15 +594,15 @@ export const UploadEagleVideoModal: React.FC<UploadEagleVideoModalProps> = ({
                       {isProcessing ? (
                         <>
                           <div className="w-4 h-4 border-2 border-[#0D261B] border-t-transparent rounded-full animate-spin" />
-                          <span>Saving to Farm Database...</span>
+                          <span>Saving Permanently to Server Disk...</span>
                         </>
                       ) : (
                         <>
                           <Check className="w-4 h-4" />
                           <span>
                             {stagedKind === 'image'
-                              ? 'Save Aerial Image for Eagle View'
-                              : 'Apply Video to Eagle View Live'}
+                              ? 'Save Aerial Image to Public Folder & Apply'
+                              : 'Save Video to Public Folder (public/eagle-view-farm.mp4) & Play'}
                           </span>
                         </>
                       )}
@@ -580,9 +650,9 @@ export const UploadEagleVideoModal: React.FC<UploadEagleVideoModalProps> = ({
 
           {/* Explanatory Info Box */}
           <div className="p-4 bg-[#143727]/50 border border-[#2D6A4F] rounded-xs flex items-start gap-3 text-xs text-[#9BB0A3]">
-            <Info className="w-4 h-4 text-[#C89D4B] shrink-0 mt-0.5" />
+            <HardDrive className="w-4 h-4 text-[#C89D4B] shrink-0 mt-0.5" />
             <p className="leading-relaxed">
-              Videos and aerial photos uploaded from your phone or computer are safely stored in your browser's persistent database and remain active across site navigation.
+              Videos uploaded from your device are saved directly to the server filesystem (<span className="text-[#C89D4B] font-mono font-semibold">public/eagle-view-farm.mp4</span>) and mirrored to production. Your footage persists permanently across all user sessions, browser refreshes, and public visitors.
             </p>
           </div>
         </div>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, ArrowUpRight, Phone, Mail, ShieldCheck, MapPin, MessageCircle } from 'lucide-react';
+import { Menu, X, ArrowUpRight, Phone, Mail, ShieldCheck, MapPin, MessageCircle, Images } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { PageId } from '../types';
 import { COMPANY_DETAILS } from '../data/companyData';
@@ -9,12 +9,14 @@ interface HeaderProps {
   currentPage?: PageId;
   onNavigate?: (page: PageId) => void;
   onOpenPartnerModal: () => void;
+  onOpenGallery?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
   currentPage = 'home',
   onNavigate,
   onOpenPartnerModal,
+  onOpenGallery,
 }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -166,8 +168,19 @@ export const Header: React.FC<HeaderProps> = ({
             })}
           </nav>
 
-          {/* Action Button: Partner With Us */}
-          <div className="hidden lg:flex items-center gap-3">
+          {/* Action Buttons: Media Gallery & Partner With Us */}
+          <div className="hidden lg:flex items-center gap-2.5">
+            {onOpenGallery && (
+              <button
+                id="header-gallery-btn"
+                onClick={onOpenGallery}
+                className="inline-flex items-center gap-1.5 px-3.5 py-2.5 bg-[#FAF8F3] hover:bg-[#F2EFE8] text-[#143727] text-xs font-bold rounded-full border border-[#D5D1C4] shadow-2xs hover:shadow-xs transition-all duration-200 cursor-pointer"
+                title="Open Public Server Media Gallery (Change Images & Videos)"
+              >
+                <Images className="w-3.5 h-3.5 text-[#C89D4B]" />
+                <span>Media Gallery</span>
+              </button>
+            )}
             <button
               id="header-partner-btn"
               onClick={onOpenPartnerModal}
@@ -240,6 +253,20 @@ export const Header: React.FC<HeaderProps> = ({
             </div>
 
             <div className="pt-4 border-t border-[#E7E5DE] space-y-3">
+              {onOpenGallery && (
+                <button
+                  id="mobile-menu-gallery-action"
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    onOpenGallery();
+                  }}
+                  className="w-full flex items-center justify-center gap-2 px-5 py-3 bg-[#FAF8F3] hover:bg-[#F2EFE8] text-[#143727] text-xs font-bold tracking-wider uppercase rounded-xl border border-[#D5D1C4] shadow-xs cursor-pointer"
+                >
+                  <Images className="w-4 h-4 text-[#C89D4B]" />
+                  <span>Media Gallery &amp; Public Server</span>
+                </button>
+              )}
+
               <button
                 id="mobile-menu-partner-action"
                 onClick={() => {

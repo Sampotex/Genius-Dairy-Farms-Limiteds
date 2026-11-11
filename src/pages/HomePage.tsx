@@ -12,18 +12,21 @@ import {
   Phone,
   ShieldCheck,
   BookOpen,
+  Image as ImageIcon,
 } from 'lucide-react';
 import { PageId } from '../types';
 import { COMPANY_DETAILS } from '../data/companyData';
 import { Logo } from '../components/Logo';
 import { useBrandMedia, useSiteImages } from '../context/BrandMediaContext';
+import { ACADEMY_LOGO_BASE64 } from '../data/academyLogoFallback';
 import {
   getCustomInsightImages,
   loadCustomInsightImagesAsync,
 } from '../utils/insightsImageStorage';
+import { EagleViewSection } from '../components/EagleViewSection';
 
 interface HomePageProps {
-  onNavigate: (page: PageId) => void;
+  onNavigate: (page: PageId | string) => void;
   onOpenPartnerModal: () => void;
 }
 
@@ -31,7 +34,7 @@ export const HomePage: React.FC<HomePageProps> = ({
   onNavigate,
   onOpenPartnerModal,
 }) => {
-  const { heroUrl } = useBrandMedia();
+  const { heroUrl, getImage } = useBrandMedia();
   const images = useSiteImages();
   const [customInsightImage, setCustomInsightImage] = useState<string>('/1200x794.jpg');
 
@@ -74,12 +77,12 @@ export const HomePage: React.FC<HomePageProps> = ({
     {
       id: 'academy',
       badge: 'Accredited Capacity Hub',
-      title: 'Genius Dairy Academy',
+      title: 'Genius Dairy Academy Limited',
       tagline: 'Knowledge. Skills. Opportunity.',
       description:
         'Accredited educational division (RC: 8888771) delivering residential hands-on training, bovine genetics & artificial insemination, and university SIWES internships on an active 60-acre ranch.',
-      image: images.studentGroup,
-      ctaLabel: 'Discover Genius Academy',
+      image: getImage('academyLogo') || images.academyLogo || '/academy-logo.jpg',
+      ctaLabel: 'Discover Genius Dairy Academy',
       targetPage: 'academy' as PageId,
       highlights: [
         'Officially Registered Division (RC: 8888771)',
@@ -112,7 +115,7 @@ export const HomePage: React.FC<HomePageProps> = ({
       tagline: 'Field perspectives on tropical dairy farming in Nigeria',
       description:
         'Insights, research notes, and field updates covering tropical dairy genetics, silage conservation, agribusiness economics, and commercial ranching developments.',
-      image: customInsightImage || '/1200x794.jpg',
+      image: customInsightImage || getImage('insightYield') || '/1200x794.jpg',
       ctaLabel: 'Read Dairy Insights',
       targetPage: 'insights' as PageId,
       highlights: [
@@ -136,14 +139,17 @@ export const HomePage: React.FC<HomePageProps> = ({
         {/* Visual Background */}
         <div className="absolute inset-0 z-0">
           <img
-            src={heroUrl}
-            alt="Genius Dairy Farms commercial dairy operations in Nigeria"
-            className="w-full h-full object-cover object-center scale-102 transition-transform duration-1000 ease-out"
+            src={heroUrl || '/hero.jpg'}
+            onError={(e) => {
+              const target = e.currentTarget;
+              target.src = '/hero.jpg';
+            }}
+            alt="Dairy cows in the covered milking area with farm workers at Genius Dairy Farms"
+            className="w-full h-full object-cover object-[center_right] md:object-center scale-100 transition-transform duration-1000 ease-out"
           />
-          {/* Depth Overlays */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#05110B]/95 via-[#081B12]/88 to-[#0B2519]/70" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#06140D] via-transparent to-[#05110B]/60" />
-          <div className="absolute inset-0 bg-[radial-gradient(#C89D4B_1px,transparent_1px)] [background-size:36px_36px] opacity-15" />
+          {/* Depth Overlays — subtle scrim for text contrast preserving full visibility of the cows and farm workers */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#05110B]/90 via-[#06140D]/70 sm:via-[#081B12]/45 to-black/25" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#06140D] via-black/10 to-[#05110B]/30" />
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-28 w-full">
@@ -165,7 +171,7 @@ export const HomePage: React.FC<HomePageProps> = ({
 
             {/* Short Supporting Description */}
             <p className="text-base sm:text-xl text-[#CBDDD2] max-w-2xl font-normal leading-relaxed mb-6">
-              Pioneering commercial dairy ranching, wholesome dairy processing through Udderfall, and practical agribusiness education via Genius Dairy Academy from our 60-acre facility in Iseyin, Oyo State.
+              Pioneering commercial dairy ranching, wholesome dairy processing through Udderfall, and practical agribusiness education via Genius Dairy Academy Limited from our 60-acre facility in Iseyin, Oyo State.
             </p>
 
             {/* Location Pill */}
@@ -207,7 +213,7 @@ export const HomePage: React.FC<HomePageProps> = ({
             <span className="text-[#C89D4B]">•</span>
             <span>Udderfall Yogurt &amp; Artisan Cheese</span>
             <span className="text-[#C89D4B]">•</span>
-            <span>Genius Dairy Academy (RC: 8888771)</span>
+            <span>Genius Dairy Academy Limited (RC: 8888771)</span>
             <span className="text-[#C89D4B]">•</span>
             <span>Sustainable Pasture &amp; High-Yield Genetics</span>
           </div>
@@ -264,7 +270,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                 Founded in 2009 with just five cattle, Genius Dairy Farms Limited has grown into an integrated livestock and dairy agribusiness based in Iseyin, Oyo State. We demonstrate that Nigeria can produce world-class dairy products locally through disciplined ranching, high-tonnage forage agronomy, and modern cold-chain handling.
               </p>
               <p className="text-sm text-[#55625B] leading-relaxed">
-                Our 60-acre integrated campus powers consumer dairy processing under the Udderfall brand, intensive herd management, and practical agribusiness education through the accredited Genius Dairy Academy.
+                Our 60-acre integrated campus powers consumer dairy processing under the Udderfall brand, intensive herd management, and practical agribusiness education through the accredited Genius Dairy Academy Limited.
               </p>
 
               <div className="pt-2 flex flex-wrap items-center gap-4">
@@ -307,7 +313,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                   </div>
                   <div className="flex items-start gap-2.5">
                     <CheckCircle2 className="w-4 h-4 text-[#143727] shrink-0 mt-0.5" />
-                    <span>Genius Dairy Academy hands-on practical agribusiness training</span>
+                    <span>Genius Dairy Academy Limited hands-on practical agribusiness training</span>
                   </div>
                   <div className="flex items-start gap-2.5">
                     <CheckCircle2 className="w-4 h-4 text-[#143727] shrink-0 mt-0.5" />
@@ -345,32 +351,96 @@ export const HomePage: React.FC<HomePageProps> = ({
               >
                 <div>
                   <div className="h-60 relative overflow-hidden bg-[#0A1D14]">
-                    <img
-                      src={division.image}
-                      alt={division.title}
-                      onError={(e) => {
-                        const target = e.currentTarget;
-                        if (target.src !== window.location.origin + '/1200x794.jpg') {
-                          target.src = '/1200x794.jpg';
-                        }
-                      }}
-                      className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-700"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
-                    <div className="absolute top-4 left-4 bg-white/95 backdrop-blur-md px-3.5 py-1 rounded-full text-xs font-bold text-[#143727] shadow-sm">
-                      {division.badge}
-                    </div>
-                    <div className="absolute bottom-4 left-6 right-6 text-white">
-                      <span className="text-xs font-medium text-[#C89D4B] tracking-wider uppercase block mb-1">
-                        {division.tagline}
-                      </span>
-                      <h3 className="font-heading font-extrabold text-2xl text-white">
-                        {division.title}
-                      </h3>
-                    </div>
+                    {division.id === 'academy' ? (
+                      <div className="w-full h-full relative bg-gradient-to-br from-[#06180E] via-[#0D2A1C] to-[#081810] flex items-center justify-center p-4">
+                        <div className="absolute inset-0 bg-[radial-gradient(#C89D4B_1px,transparent_1px)] [background-size:24px_24px] opacity-20 pointer-events-none" />
+                        
+                        {/* High-Resolution Centered Logo Showcase */}
+                        <div className="relative z-10 flex flex-col items-center justify-center">
+                          <div className="w-32 h-32 sm:w-36 sm:h-36 rounded-full bg-white/10 border-2 border-[#C89D4B]/70 p-2 shadow-2xl backdrop-blur-xs flex items-center justify-center group-hover:scale-105 transition-transform duration-500">
+                            <div className="w-full h-full rounded-full bg-white p-1.5 shadow-inner overflow-hidden flex items-center justify-center">
+                              <img
+                                src={division.image}
+                                alt="Genius Dairy Academy Limited Official Logo"
+                                referrerPolicy="no-referrer"
+                                onError={(e) => {
+                                  e.currentTarget.src = ACADEMY_LOGO_BASE64;
+                                }}
+                                className="w-full h-full object-contain"
+                              />
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Badges */}
+                        <div className="absolute top-4 left-4 bg-white/95 backdrop-blur-md px-3.5 py-1 rounded-full text-xs font-bold text-[#143727] shadow-sm">
+                          {division.badge}
+                        </div>
+                        <div className="absolute top-4 right-4 bg-[#143727]/90 border border-[#C89D4B]/50 text-[#C89D4B] px-3 py-1 rounded-full text-[11px] font-bold tracking-wider shadow-sm">
+                          RC: 8888771
+                        </div>
+                        <div className="absolute bottom-2.5 left-4 right-4 text-center">
+                          <span className="text-[11px] font-bold text-[#C89D4B] tracking-widest uppercase block drop-shadow-sm">
+                            {division.tagline}
+                          </span>
+                        </div>
+                      </div>
+                    ) : (
+                      <>
+                        <img
+                          src={division.image}
+                          alt={division.title}
+                          onError={(e) => {
+                            const target = e.currentTarget;
+                            const origin = window.location.origin;
+                            if (target.src !== origin + '/1200x794.jpg') {
+                              target.src = '/1200x794.jpg';
+                            } else if (target.src !== origin + '/corporateFarmFacility.jpg') {
+                              target.src = '/corporateFarmFacility.jpg';
+                            }
+                          }}
+                          className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-700"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
+                        <div className="absolute top-4 left-4 bg-white/95 backdrop-blur-md px-3.5 py-1 rounded-full text-xs font-bold text-[#143727] shadow-sm">
+                          {division.badge}
+                        </div>
+                        <div className="absolute bottom-4 left-6 right-6 text-white">
+                          <span className="text-xs font-medium text-[#C89D4B] tracking-wider uppercase block mb-1">
+                            {division.tagline}
+                          </span>
+                          <h3 className="font-heading font-extrabold text-2xl text-white">
+                            {division.title}
+                          </h3>
+                        </div>
+                      </>
+                    )}
                   </div>
 
                   <div className="p-7 space-y-4">
+                    {division.id === 'academy' && (
+                      <div className="flex items-center gap-3.5 pb-3 border-b border-[#F0ECE1]">
+                        <div className="w-12 h-12 rounded-full bg-white p-1 border-2 border-[#C89D4B]/50 shadow-xs shrink-0 overflow-hidden flex items-center justify-center">
+                          <img
+                            src={division.image}
+                            alt="Genius Dairy Academy Limited Official Logo"
+                            referrerPolicy="no-referrer"
+                            onError={(e) => {
+                              e.currentTarget.src = ACADEMY_LOGO_BASE64;
+                            }}
+                            className="w-full h-full object-contain"
+                          />
+                        </div>
+                        <div>
+                          <h3 className="font-heading font-extrabold text-xl text-[#151A18] leading-tight">
+                            {division.title}
+                          </h3>
+                          <span className="text-[11px] font-semibold text-[#8D6B26] block">
+                            Official Registered Crest • Learn • Grow • Lead
+                          </span>
+                        </div>
+                      </div>
+                    )}
                     <p className="text-sm text-[#4A554F] leading-relaxed">
                       {division.description}
                     </p>
@@ -386,7 +456,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                   </div>
                 </div>
 
-                <div className="p-7 pt-0">
+                <div className="p-7 pt-0 space-y-2">
                   <button
                     onClick={() => onNavigate(division.targetPage)}
                     className="w-full inline-flex items-center justify-center gap-2 px-5 py-3.5 bg-[#143727] hover:bg-[#0D261B] text-white text-xs font-bold uppercase tracking-wider rounded-xl transition-colors shadow-sm group-hover:bg-[#C89D4B] group-hover:text-[#0D261B] cursor-pointer"
@@ -394,12 +464,27 @@ export const HomePage: React.FC<HomePageProps> = ({
                     <span>{division.ctaLabel}</span>
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                   </button>
+
+                  {division.id === 'udderfall' && (
+                    <button
+                      onClick={() => onNavigate('/udderfall/gallery')}
+                      className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-[#FAF8F3] hover:bg-[#EAE6DC] text-[#143727] text-xs font-bold rounded-xl transition-colors border border-[#E0DDD5] cursor-pointer"
+                    >
+                      <ImageIcon className="w-3.5 h-3.5 text-[#C89D4B]" />
+                      <span>View Media Gallery: Our Dairy Products</span>
+                    </button>
+                  )}
                 </div>
               </div>
             ))}
           </div>
         </div>
       </section>
+
+      {/* =========================================================================
+          EAGLE VIEW DRONE AERIAL TOUR & VIDEO SHOWCASE
+          ========================================================================= */}
+      <EagleViewSection />
 
       {/* =========================================================================
           FOCUSED CALL TO ACTION

@@ -48,7 +48,7 @@ export const MASTER_GALLERY_PHOTOS: GalleryPhotoItem[] = [
     title: 'Official CAC Certificate of Incorporation (RC: 8888771)',
     category: 'Brand & Logo',
     src: IMAGES.cacCertificate,
-    caption: 'Official Certificate of Incorporation issued by the Corporate Affairs Commission (CAC), Federal Republic of Nigeria (RC: 8888771, TIN: 33588943-0001) under the Companies and Allied Matters Act 2020. Corporate business registration evidence for Genius Dairy Academy Ltd / Genius Dairy Farms.',
+    caption: 'Official Certificate of Incorporation issued by the Corporate Affairs Commission (CAC), Federal Republic of Nigeria (RC: 8888771, TIN: 33588943-0001) under the Companies and Allied Matters Act 2020. Corporate business registration evidence for Genius Dairy Academy Limited / Genius Dairy Farms Limited.',
     location: 'Federal Republic of Nigeria / Iseyin, Oyo State',
     tag: 'Official Registration',
   },
@@ -198,11 +198,11 @@ export const MASTER_GALLERY_PHOTOS: GalleryPhotoItem[] = [
   },
   {
     id: 'student-group',
-    title: 'Genius Dairy Academy Training Cohort',
+    title: 'Genius Dairy Academy Limited Training Cohort',
     category: 'Academy & Training',
     src: IMAGES.studentGroup,
     caption: 'Next-generation Nigerian agropreneurs and university students engaged in immersive practical learning across cattle nutrition, genetics, and ranching economics.',
-    location: 'Genius Dairy Academy, Iseyin',
+    location: 'Genius Dairy Academy Limited, Iseyin',
     tag: 'Youth Agropreneurship',
   },
   {

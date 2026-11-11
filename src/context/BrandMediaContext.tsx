@@ -14,6 +14,7 @@ import { ACADEMY_LOGO_BASE64 } from '../data/academyLogoFallback';
 import { useFounderPhoto } from './FounderPhotoContext';
 import { saveUserGalleryPhoto } from '../utils/userPhotoStorage';
 import { openMediaDatabase, STORES } from '../utils/mediaDb';
+import { PERMANENT_UPLOADED_ASSETS, PermanentMediaAsset } from '../data/uploadsCatalog';
 
 export type MediaCategory =
   | 'Brand & Identity'
@@ -22,9 +23,12 @@ export type MediaCategory =
   | 'Pasture & Agronomy'
   | 'Udderfall Dairy Foods'
   | 'Academy & Training'
-  | 'Sustainability';
+  | 'Sustainability'
+  | 'Insights & News';
 
 export type MediaSlotKey =
+  // Video & Drone Aerials
+  | 'eagleViewVideo'
   // Brand & Leadership
   | 'logo'
   | 'academyLogo'
@@ -63,6 +67,12 @@ export type MediaSlotKey =
   // Sustainability & Environment
   | 'sustainabilityLandscape'
   | 'solarAndCleanWater'
+  // Insights & News
+  | 'insightYield'
+  | 'insightSilage'
+  | 'insightMilestone'
+  | 'insightEducation'
+  | 'insightPolicy'
   // Aliases for backwards compatibility
   | 'farm'
   | 'product';
@@ -77,9 +87,23 @@ export interface MediaSlotDefinition {
   description: string;
   locationUsed: string;
   recommendedResolution: string;
+  isVideo?: boolean;
 }
 
 export const MEDIA_SLOTS: Record<string, MediaSlotDefinition> = {
+  // Video & Drone Aerials
+  eagleViewVideo: {
+    key: 'eagleViewVideo',
+    name: 'Eagle View 60-Acre Drone Aerial Video Flight',
+    shortLabel: 'Drone Tour Video',
+    category: 'Home & Facilities',
+    defaultUrl: '/eagle-view-farm.mp4',
+    aspectRatioLabel: '16:9 Landscape Video',
+    description: '1080p full aerial drone video tour showing the farm complex, paddocks, barns, and boundaries in Iseyin, Oyo State.',
+    locationUsed: 'Eagle View section on Home page and Our Farm page.',
+    recommendedResolution: '1920 × 1080 px (MP4, WebM)',
+    isVideo: true,
+  },
   // Brand & Leadership
   logo: {
     key: 'logo',
@@ -108,7 +132,7 @@ export const MEDIA_SLOTS: Record<string, MediaSlotDefinition> = {
     name: 'Founder Portrait (Moyosore Olatunde Rafiu)',
     shortLabel: 'Founder Photo',
     category: 'Brand & Identity',
-    defaultUrl: FOUNDER_IMAGE_BASE64,
+    defaultUrl: '/founder.jpg',
     aspectRatioLabel: '3:4 or 4:5 Portrait',
     description: 'Portrait of Founder and Managing Director Moyosore Olatunde Rafiu at the dairy farm.',
     locationUsed: 'About page leadership profile, Founder card, and executive message.',
@@ -119,9 +143,9 @@ export const MEDIA_SLOTS: Record<string, MediaSlotDefinition> = {
     name: 'Official CAC Certificate of Incorporation',
     shortLabel: 'CAC Certificate',
     category: 'Brand & Identity',
-    defaultUrl: CAC_CERTIFICATE_BASE64,
+    defaultUrl: '/cac-certificate.jpg',
     aspectRatioLabel: '3:4 Portrait',
-    description: 'Official CAC business registration evidence (RC: 8888771, TIN: 33588943-0001) for Genius Dairy Academy Ltd / Genius Dairy Farms Limited.',
+    description: 'Official CAC business registration evidence (RC: 8888771, TIN: 33588943-0001) for Genius Dairy Academy Limited / Genius Dairy Farms Limited.',
     locationUsed: 'Udderfall section CAC Registration & Business Verification, legal compliance showcase.',
     recommendedResolution: '1200 × 1600 px',
   },
@@ -434,6 +458,63 @@ export const MEDIA_SLOTS: Record<string, MediaSlotDefinition> = {
     locationUsed: 'Resource conservation, sustainability metrics, and gallery.',
     recommendedResolution: '1200 × 800 px',
   },
+
+  // Insights & News Articles
+  insightYield: {
+    key: 'insightYield',
+    name: 'Insight: Transforming Dairy Yields (1.5L to 15L Daily)',
+    shortLabel: 'Dairy Yields Article',
+    category: 'Insights & News',
+    defaultUrl: '/insight-yield-transformation.jpg',
+    aspectRatioLabel: '16:9 Landscape',
+    description: 'High-yield crossbred dairy cow illustrating genetic transformation in Southwest Nigeria.',
+    locationUsed: 'Insights page article card and reader modal.',
+    recommendedResolution: '1200 × 800 px',
+  },
+  insightSilage: {
+    key: 'insightSilage',
+    name: 'Insight: Dry Season Forage Strategies in Oyo State',
+    shortLabel: 'Silage & Forage Article',
+    category: 'Insights & News',
+    defaultUrl: '/insight-silage-pasture.jpg',
+    aspectRatioLabel: '16:9 Landscape',
+    description: 'Covered barn & pit silage management ensuring year-round milk consistency.',
+    locationUsed: 'Insights page article card and reader modal.',
+    recommendedResolution: '1200 × 800 px',
+  },
+  insightMilestone: {
+    key: 'insightMilestone',
+    name: 'Insight: Dairy Development Programme (FrieslandCampina WAMCO)',
+    shortLabel: 'DDP Milestone Article',
+    category: 'Insights & News',
+    defaultUrl: '/insight-ddp-milestone.jpg',
+    aspectRatioLabel: '16:9 Landscape',
+    description: 'Commercial facility transition milestone with FrieslandCampina WAMCO.',
+    locationUsed: 'Insights page article card and reader modal.',
+    recommendedResolution: '1200 × 800 px',
+  },
+  insightEducation: {
+    key: 'insightEducation',
+    name: 'Insight: Empowering Youth Dairy Professionals',
+    shortLabel: 'Youth Training Article',
+    category: 'Insights & News',
+    defaultUrl: '/insight-youth-education.jpg',
+    aspectRatioLabel: '16:9 Landscape',
+    description: 'Genius Dairy Farm Academy hands-on practical agricultural training in Iseyin.',
+    locationUsed: 'Insights page article card and reader modal.',
+    recommendedResolution: '1200 × 800 px',
+  },
+  insightPolicy: {
+    key: 'insightPolicy',
+    name: 'Insight: Nigeria National Dairy Policy & Sourcing',
+    shortLabel: 'Dairy Policy Article',
+    category: 'Insights & News',
+    defaultUrl: '/insight-dairy-policy.jpg',
+    aspectRatioLabel: '16:9 Landscape',
+    description: 'Macro agribusiness perspective on backward integration and domestic dairy sourcing.',
+    locationUsed: 'Insights page article card and reader modal.',
+    recommendedResolution: '1200 × 800 px',
+  },
 };
 
 // Aliases mapping
@@ -443,6 +524,18 @@ const ALIAS_MAP: Record<string, string> = {
   heroDairyCattle: 'hero',
   founderPortrait: 'founder',
   academyLogo: 'academyLogo',
+  'yield-transformation-nigeria': 'insightYield',
+  'silage-pasture-dry-season': 'insightSilage',
+  'ddp-frieslandcampina-turning-point': 'insightMilestone',
+  'academy-empowering-youth': 'insightEducation',
+  'nigeria-dairy-policy': 'insightPolicy',
+  'insight-yield-transformation.jpg': 'insightYield',
+  'insight-silage-pasture.jpg': 'insightSilage',
+  'insight-ddp-milestone.jpg': 'insightMilestone',
+  'insight-youth-education.jpg': 'insightEducation',
+  'insight-dairy-policy.jpg': 'insightPolicy',
+  insight: 'insightYield',
+  insights: 'insightYield',
 };
 
 export const GALLERY_ID_TO_SLOT: Record<string, string> = {
@@ -528,6 +621,26 @@ export function optimizeImageFromPhone(
   slotKey: string
 ): Promise<{ dataUrl: string; width: number; height: number }> {
   return new Promise((resolve, reject) => {
+    // Check if the file is a video
+    const isVideo =
+      file.type.startsWith('video/') ||
+      /\.(mp4|webm|mov|m4v|mkv)$/i.test(file.name);
+
+    if (isVideo) {
+      const reader = new FileReader();
+      reader.onerror = () => reject(new Error('Could not read video file from your device.'));
+      reader.onload = (event) => {
+        const rawDataUrl = event.target?.result as string;
+        if (!rawDataUrl) {
+          reject(new Error('Empty video data received.'));
+          return;
+        }
+        resolve({ dataUrl: rawDataUrl, width: 1920, height: 1080 });
+      };
+      reader.readAsDataURL(file);
+      return;
+    }
+
     // Tolerant check for mobile gallery files
     const isImage =
       file.type.startsWith('image/') ||
@@ -536,7 +649,7 @@ export function optimizeImageFromPhone(
       file.type === 'application/octet-stream';
 
     if (!isImage) {
-      reject(new Error('Please select a valid image file from your gallery (JPEG, PNG, WebP, etc.)'));
+      reject(new Error('Please select a valid image or video file from your device (JPG, PNG, WebP, MP4, WebM).'));
       return;
     }
 
@@ -648,6 +761,25 @@ interface BrandMediaContextType {
   activeModalSlot: MediaSlotKey;
   openReplaceModal: (slotKey?: MediaSlotKey) => void;
   closeReplaceModal: () => void;
+
+  // Permanent Media Vault Modal controls (legacy compatibility)
+  isUploadedVaultOpen: boolean;
+  openUploadedVault: () => void;
+  closeUploadedVault: () => void;
+
+  // Website Fullscreen Lightbox & Image Previewer
+  isLightboxOpen: boolean;
+  lightboxAsset: PermanentMediaAsset | null;
+  lightboxIndex: number;
+  lightboxTotal: number;
+  lightboxList: PermanentMediaAsset[];
+  openLightbox: (
+    assetOrUrlOrId: PermanentMediaAsset | string,
+    customList?: PermanentMediaAsset[]
+  ) => void;
+  closeLightbox: () => void;
+  nextLightbox: () => void;
+  prevLightbox: () => void;
 }
 
 const BrandMediaContext = createContext<BrandMediaContextType | undefined>(undefined);
@@ -666,6 +798,97 @@ export const BrandMediaProvider: React.FC<{ children: ReactNode }> = ({ children
   const [customSlots, setCustomSlots] = useState<Record<string, boolean>>({});
   const [isReplaceModalOpen, setIsReplaceModalOpen] = useState(false);
   const [activeModalSlot, setActiveModalSlot] = useState<MediaSlotKey>('logo');
+  const [isUploadedVaultOpen, setIsUploadedVaultOpen] = useState(false);
+
+  // Full-screen Image Lightbox & Previewer state
+  const [lightboxAsset, setLightboxAsset] = useState<PermanentMediaAsset | null>(null);
+  const [lightboxList, setLightboxList] = useState<PermanentMediaAsset[]>(
+    PERMANENT_UPLOADED_ASSETS.filter((a) => !a.isVideo)
+  );
+
+  const openLightbox = useCallback(
+    (assetOrUrlOrId: PermanentMediaAsset | string, customList?: PermanentMediaAsset[]) => {
+      const list =
+        customList && customList.length > 0
+          ? customList
+          : PERMANENT_UPLOADED_ASSETS.filter((a) => !a.isVideo);
+      setLightboxList(list);
+
+      if (typeof assetOrUrlOrId === 'object' && assetOrUrlOrId !== null) {
+        setLightboxAsset(assetOrUrlOrId);
+      } else {
+        const found = list.find(
+          (a) =>
+            a.id === assetOrUrlOrId ||
+            a.url === assetOrUrlOrId ||
+            a.slotKey === assetOrUrlOrId ||
+            a.filename === assetOrUrlOrId
+        );
+        if (found) {
+          setLightboxAsset(found);
+        } else {
+          setLightboxAsset({
+            id: 'custom-preview',
+            filename: 'image.jpg',
+            url: String(assetOrUrlOrId),
+            slotKey: 'custom',
+            title: 'Farm Photography Preview',
+            category: 'Farm Gallery',
+            description: 'High-resolution operational photo from Genius Dairy Farms Limited.',
+            sizeFormatted: 'HD Resolution',
+            storageLocation: 'Genius Dairy Farms Limited',
+            isPermanent: true,
+          });
+        }
+      }
+    },
+    []
+  );
+
+  const closeLightbox = useCallback(() => {
+    setLightboxAsset(null);
+  }, []);
+
+  const nextLightbox = useCallback(() => {
+    if (!lightboxAsset) return;
+    const idx = lightboxList.findIndex(
+      (a) => a.id === lightboxAsset.id || a.url === lightboxAsset.url
+    );
+    if (idx !== -1 && idx < lightboxList.length - 1) {
+      setLightboxAsset(lightboxList[idx + 1]);
+    } else if (idx === lightboxList.length - 1 && lightboxList.length > 1) {
+      setLightboxAsset(lightboxList[0]);
+    }
+  }, [lightboxAsset, lightboxList]);
+
+  const prevLightbox = useCallback(() => {
+    if (!lightboxAsset) return;
+    const idx = lightboxList.findIndex(
+      (a) => a.id === lightboxAsset.id || a.url === lightboxAsset.url
+    );
+    if (idx > 0) {
+      setLightboxAsset(lightboxList[idx - 1]);
+    } else if (idx === 0 && lightboxList.length > 1) {
+      setLightboxAsset(lightboxList[lightboxList.length - 1]);
+    }
+  }, [lightboxAsset, lightboxList]);
+
+  const isLightboxOpen = Boolean(lightboxAsset);
+  const lightboxIndex = useMemo(() => {
+    if (!lightboxAsset) return 0;
+    const idx = lightboxList.findIndex(
+      (a) => a.id === lightboxAsset.id || a.url === lightboxAsset.url
+    );
+    return idx === -1 ? 0 : idx;
+  }, [lightboxAsset, lightboxList]);
+
+  const openUploadedVault = useCallback(() => {
+    setIsUploadedVaultOpen(true);
+  }, []);
+
+  const closeUploadedVault = useCallback(() => {
+    setIsUploadedVaultOpen(false);
+  }, []);
 
   // Connect with FounderPhotoContext if available
   const { setPhotoFromUrl: setFounderPhotoFromUrl, resetToDefault: resetFounderContext } =
@@ -688,8 +911,17 @@ export const BrandMediaProvider: React.FC<{ children: ReactNode }> = ({ children
           await new Promise<void>((resolve) => {
             req.onsuccess = () => {
               if (req.result && typeof req.result === 'string') {
-                loadedUrls[key] = req.result;
-                loadedCustom[key] = true;
+                // Discard legacy synthetic AI image if any
+                if (key === 'academyLogo' && req.result.includes('anVtZGMypa')) {
+                  // Ignore legacy synthetic AI image
+                } else if (key === 'freshMilkPour' && req.result.includes('corporateFarmFacility')) {
+                  // Discard erroneous corporateFarmFacility mapping
+                } else if (key === 'founder' && req.result.includes('1200x794')) {
+                  // Discard erroneous cattle 1200x794 mapping
+                } else {
+                  loadedUrls[key] = req.result;
+                  loadedCustom[key] = true;
+                }
               }
               resolve();
             };
@@ -701,8 +933,16 @@ export const BrandMediaProvider: React.FC<{ children: ReactNode }> = ({ children
             try {
               const localVal = localStorage.getItem(`${STORAGE_PREFIX}${key}`);
               if (localVal) {
-                loadedUrls[key] = localVal;
-                loadedCustom[key] = true;
+                if (key === 'academyLogo' && localVal.includes('anVtZGMypa')) {
+                  // Ignore legacy synthetic AI image
+                } else if (key === 'freshMilkPour' && localVal.includes('corporateFarmFacility')) {
+                  // Discard erroneous corporateFarmFacility mapping
+                } else if (key === 'founder' && localVal.includes('1200x794')) {
+                  // Discard erroneous cattle 1200x794 mapping
+                } else {
+                  loadedUrls[key] = localVal;
+                  loadedCustom[key] = true;
+                }
               }
             } catch {
               // ignore
@@ -713,7 +953,7 @@ export const BrandMediaProvider: React.FC<{ children: ReactNode }> = ({ children
         // Check legacy aliases
         try {
           const legacyFounder = localStorage.getItem('genius_custom_founder_image');
-          if (legacyFounder && !loadedUrls.founder) {
+          if (legacyFounder && !loadedUrls.founder && !legacyFounder.includes('1200x794')) {
             loadedUrls.founder = legacyFounder;
             loadedCustom.founder = true;
           }
@@ -745,6 +985,38 @@ export const BrandMediaProvider: React.FC<{ children: ReactNode }> = ({ children
           if (loadedUrls.founder) {
             setFounderPhotoFromUrl(loadedUrls.founder);
           }
+
+          // Check server manifest for permanent filesystem assets
+          try {
+            const manifestRes = await fetch('/uploads-manifest.json');
+            if (manifestRes.ok) {
+              const manifestData = await manifestRes.json();
+              if (manifestData?.images && Array.isArray(manifestData.images)) {
+                manifestData.images.forEach((img: { slotKey: string; url: string }) => {
+                  if (img.slotKey && img.url && !loadedUrls[img.slotKey]) {
+                    loadedUrls[img.slotKey] = img.url;
+                  }
+                });
+              }
+            }
+          } catch {
+            // fallback gracefully
+          }
+
+          // Auto-sync any existing custom media from this browser to server disk permanently
+          Object.entries(loadedUrls).forEach(([key, val]) => {
+            if (val && val.startsWith('data:image/')) {
+              try {
+                fetch('/api/upload-media', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ slotKey: key, dataUrl: val }),
+                }).catch(() => {});
+              } catch {
+                // non-critical
+              }
+            }
+          });
         }
       } catch (err) {
         console.warn('Could not load brand media from IndexedDB:', err);
@@ -815,6 +1087,17 @@ export const BrandMediaProvider: React.FC<{ children: ReactNode }> = ({ children
       }
     } catch {
       // LocalStorage quota may be exceeded on large sets
+    }
+
+    // Sync to server disk for permanent persistence across all devices & deployments
+    try {
+      fetch('/api/upload-media', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ slotKey: canonicalKey, dataUrl }),
+      }).catch(() => {});
+    } catch {
+      // non-critical
     }
   };
 
@@ -1088,6 +1371,18 @@ export const BrandMediaProvider: React.FC<{ children: ReactNode }> = ({ children
         activeModalSlot,
         openReplaceModal,
         closeReplaceModal,
+        isUploadedVaultOpen,
+        openUploadedVault,
+        closeUploadedVault,
+        isLightboxOpen,
+        lightboxAsset,
+        lightboxIndex,
+        lightboxTotal: lightboxList.length,
+        lightboxList,
+        openLightbox,
+        closeLightbox,
+        nextLightbox,
+        prevLightbox,
       }}
     >
       {children}

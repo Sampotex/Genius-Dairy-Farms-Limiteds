@@ -75,11 +75,11 @@ export const EventsPage: React.FC<EventsPageProps> = ({ onNavigate }) => {
     },
     {
       id: 'academy-orientation-cohort4',
-      title: 'Genius Dairy Academy: Cohort 4 Induction & Roster',
+      title: 'Genius Dairy Academy Limited: Cohort 4 Induction & Roster',
       category: 'Academy & Students',
       date: 'January 18, 2027',
       time: '09:30 AM – 01:00 PM WAT',
-      venue: 'Genius Dairy Farm Academy Lecture Hall, Iseyin',
+      venue: 'Genius Dairy Academy Limited Lecture Hall, Iseyin',
       badge: 'Academic Milestone',
       spotsAvailable: 'Open to Admitted Students',
       description:

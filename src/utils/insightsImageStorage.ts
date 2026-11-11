@@ -48,7 +48,17 @@ export function getCustomInsightImages(): Record<string, string> {
     if (raw) {
       const parsed = JSON.parse(raw);
       if (typeof parsed === 'object' && parsed !== null) {
-        memoryCache = { ...parsed };
+        // Sanitize: ensure no invalid or expired blob: URLs cause broken image icons
+        const sanitized: Record<string, string> = {};
+        for (const [k, v] of Object.entries(parsed)) {
+          if (
+            typeof v === 'string' &&
+            (v.startsWith('data:image/') || v.startsWith('http://') || v.startsWith('https://') || v.startsWith('/'))
+          ) {
+            sanitized[k] = v;
+          }
+        }
+        memoryCache = sanitized;
         return { ...memoryCache };
       }
     }
@@ -91,7 +101,10 @@ export async function loadCustomInsightImagesAsync(): Promise<Record<string, str
               getReq.onsuccess = () => {
                 const articleId = (key as string).replace('insight_', '');
                 if (getReq.result && typeof getReq.result === 'string') {
-                  images[articleId] = getReq.result;
+                  const val = getReq.result;
+                  if (val.startsWith('data:image/') || val.startsWith('http') || val.startsWith('/')) {
+                    images[articleId] = val;
+                  }
                 }
                 pending -= 1;
                 if (pending === 0) resolve();
@@ -110,7 +123,38 @@ export async function loadCustomInsightImagesAsync(): Promise<Record<string, str
     console.warn('IndexedDB read warning for insights:', err);
   }
 
+  // Also query server permanent insight images
+  try {
+    const res = await fetch('/api/insight-images');
+    if (res.ok) {
+      const serverMap = await res.json();
+      for (const [artId, serverUrl] of Object.entries(serverMap)) {
+        if (!images[artId] && typeof serverUrl === 'string') {
+          images[artId] = serverUrl;
+        }
+      }
+    }
+  } catch {
+    // non-critical
+  }
+
   memoryCache = { ...images };
+
+  // Auto-sync all valid custom insight images to server disk permanently
+  for (const [articleId, dataUrl] of Object.entries(images)) {
+    if (dataUrl && dataUrl.startsWith('data:image/')) {
+      try {
+        fetch('/api/upload-media', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ slotKey: articleId, dataUrl }),
+        }).catch(() => {});
+      } catch {
+        // non-critical
+      }
+    }
+  }
+
   return { ...memoryCache };
 }
 
@@ -265,7 +309,49 @@ export async function saveCustomInsightImage(
     );
   }
 
+  // 5. Sync to server disk permanently for published deployments
+  try {
+    fetch('/api/upload-media', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ slotKey: articleId, dataUrl: finalDataUrl }),
+    }).catch(() => {});
+  } catch {
+    // non-critical
+  }
+
   return finalDataUrl;
+}
+
+/**
+ * Manually or automatically synchronizes all local/browser insight images directly
+ * to the permanent server filesystem (/public and /dist).
+ */
+export async function syncAllInsightImagesToServer(): Promise<{ success: boolean; count: number; savedFiles?: string[] }> {
+  const images = getCustomInsightImages();
+  const entries = Object.entries(images).filter(([_, v]) => typeof v === 'string' && v.startsWith('data:image/'));
+
+  if (entries.length === 0) {
+    return { success: true, count: 0 };
+  }
+
+  try {
+    const payload = Object.fromEntries(entries);
+    const res = await fetch('/api/save-all-insight-images', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ images: payload }),
+    });
+
+    if (res.ok) {
+      const data = await res.json();
+      return { success: true, count: entries.length, savedFiles: data.savedFiles };
+    }
+  } catch (err) {
+    console.warn('Bulk insight sync to server failed:', err);
+  }
+
+  return { success: false, count: entries.length };
 }
 
 /**

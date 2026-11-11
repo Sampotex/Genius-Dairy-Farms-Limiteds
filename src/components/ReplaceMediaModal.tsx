@@ -19,6 +19,7 @@ import {
   CheckCircle2,
   FileText,
   Video,
+  HardDrive,
 } from 'lucide-react';
 import {
   useBrandMedia,
@@ -118,6 +119,7 @@ export const ReplaceMediaModal: React.FC = () => {
     'Udderfall Dairy Foods',
     'Academy & Training',
     'Sustainability',
+    'Insights & News',
   ];
 
   // Filtered slots for All Images Grid

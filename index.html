@@ -16,6 +16,44 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <script>
+      (function() {
+        // Intercept and swallow third-party browser extension errors (e.g. MetaMask, Phantom inpage scripts)
+        function isExtensionError(event) {
+          try {
+            var msg = (event && (event.message || (event.reason && (event.reason.message || event.reason.stack)))) || '';
+            var filename = (event && event.filename) || '';
+            var stack = (event && event.error && event.error.stack) || '';
+            var text = (String(msg) + ' ' + String(filename) + ' ' + String(stack)).toLowerCase();
+            return (
+              text.indexOf('chrome-extension://') !== -1 ||
+              text.indexOf('moz-extension://') !== -1 ||
+              text.indexOf('safari-extension://') !== -1 ||
+              text.indexOf('metamask') !== -1 ||
+              text.indexOf('inpage.js') !== -1 ||
+              text.indexOf('failed to connect to metamask') !== -1 ||
+              text.indexOf('ethereum') !== -1
+            );
+          } catch (e) {
+            return false;
+          }
+        }
+        window.addEventListener('error', function(e) {
+          if (isExtensionError(e)) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            return true;
+          }
+        }, true);
+        window.addEventListener('unhandledrejection', function(e) {
+          if (isExtensionError(e)) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            return true;
+          }
+        }, true);
+      })();
+    </script>
   </head>
   <body class="bg-[#FBFBFA] text-[#1A211E] antialiased selection:bg-[#1B4332] selection:text-white font-sans">
     <div id="root"></div>

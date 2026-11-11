@@ -31,7 +31,7 @@ import { Logo } from '../components/Logo';
 import { WholesaleQuoteModal } from '../components/WholesaleQuoteModal';
 import { FounderProfileCard } from '../components/FounderProfileCard';
 import { CustomerTestimonialCarousel } from '../components/CustomerTestimonialCarousel';
-import { useSiteImages } from '../context/BrandMediaContext';
+import { useSiteImages, useBrandMedia } from '../context/BrandMediaContext';
 
 interface UdderfallPageProps {
   onNavigate: (page: PageId) => void;
@@ -39,6 +39,7 @@ interface UdderfallPageProps {
 
 export const UdderfallPage: React.FC<UdderfallPageProps> = ({ onNavigate }) => {
   const images = useSiteImages();
+  const { openLightbox } = useBrandMedia();
   const [wholesaleModalOpen, setWholesaleModalOpen] = useState(false);
   const [wholesaleCategory, setWholesaleCategory] = useState<'mozzarella' | 'yogurt' | 'all'>(
     'mozzarella'
@@ -242,29 +243,41 @@ export const UdderfallPage: React.FC<UdderfallPageProps> = ({ onNavigate }) => {
             </div>
 
             <div className="lg:col-span-5 relative">
-              <div className="relative rounded-xs overflow-hidden shadow-lg border border-[#E3DFD5] group/pour">
-                <img
-                  src={images.freshMilkPour}
-                  alt="Farm milk pouring directly into Udderfall processing"
-                  className="w-full h-[460px] object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+              {(() => {
+                const milkPourUrl =
+                  images.freshMilkPour && !images.freshMilkPour.includes('corporateFarmFacility')
+                    ? images.freshMilkPour
+                    : 'https://images.unsplash.com/photo-1550583724-b2692b85b150?auto=format&fit=crop&w=1200&q=80';
+                return (
+                  <div
+                    onClick={() => openLightbox(milkPourUrl)}
+                    className="relative rounded-xs overflow-hidden shadow-lg border border-[#E3DFD5] group/pour cursor-pointer"
+                    title="Click to preview fresh milk harvest in fullscreen"
+                  >
+                    <img
+                      src={milkPourUrl}
+                      alt="Farm milk pouring directly into Udderfall processing"
+                      className="w-full h-[460px] object-cover group-hover/pour:scale-103 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
 
-                <div className="absolute bottom-6 left-6 right-6 text-white">
-                  <div className="flex items-center gap-2 mb-1.5">
-                    <span className="w-2 h-2 rounded-full bg-[#C89D4B]" />
-                    <span className="text-[11px] uppercase tracking-widest text-[#E0BA6E] font-bold">
-                      Direct Farm Milk
-                    </span>
+                    <div className="absolute bottom-6 left-6 right-6 text-white">
+                      <div className="flex items-center gap-2 mb-1.5">
+                        <span className="w-2 h-2 rounded-full bg-[#C89D4B]" />
+                        <span className="text-[11px] uppercase tracking-widest text-[#E0BA6E] font-bold">
+                          Direct Farm Milk
+                        </span>
+                      </div>
+                      <h4 className="font-heading font-bold text-lg text-white">
+                        Processed Fresh in Iseyin, Oyo State
+                      </h4>
+                      <p className="text-xs text-[#CBDDD2] mt-1">
+                        Connecting livestock genetics with clean-label dairy manufacturing.
+                      </p>
+                    </div>
                   </div>
-                  <h4 className="font-heading font-bold text-lg text-white">
-                    Processed Fresh in Iseyin, Oyo State
-                  </h4>
-                  <p className="text-xs text-[#CBDDD2] mt-1">
-                    Connecting livestock genetics with clean-label dairy manufacturing.
-                  </p>
-                </div>
-              </div>
+                );
+              })()}
             </div>
           </div>
         </div>
@@ -1399,155 +1412,6 @@ export const UdderfallPage: React.FC<UdderfallPageProps> = ({ onNavigate }) => {
           </div>
         </div>
       </section>
-
-      {/* =========================================================================
-          SECTION 13 — UDDERFALL DEDICATED BRAND FOOTER
-          ========================================================================= */}
-      <footer className="bg-[#091B13] text-white border-t border-[#163B29] pt-14 pb-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 pb-12 border-b border-white/10">
-            {/* Brand column */}
-            <div className="lg:col-span-4 space-y-4">
-              <div className="flex items-center gap-3">
-                <Logo size="sm" className="bg-white/10 p-0.5 rounded-full" />
-                <div>
-                  <h3 className="font-heading font-extrabold text-lg tracking-tight text-white">
-                    UDDERFALL
-                  </h3>
-                  <span className="text-xs tracking-wider text-[#C89D4B] font-bold uppercase block">
-                    Yogurt & Cheese
-                  </span>
-                </div>
-              </div>
-              <div className="text-xs text-[#9EB6A8] leading-relaxed">
-                <span className="text-[#E0BA6E] font-medium block mb-1">A Genius Dairy Farms Brand</span>
-                <span>Pure Goodness, Naturally. Made with fresh milk from our 60-acre dairy development facility in Iseyin, Oyo State.</span>
-              </div>
-            </div>
-
-            {/* Quick Links */}
-            <div className="lg:col-span-3 space-y-3">
-              <h4 className="text-xs font-bold uppercase tracking-[0.2em] text-[#C89D4B]">
-                Quick Links
-              </h4>
-              <ul className="space-y-2 text-xs text-[#CBDDD2]">
-                <li>
-                  <button onClick={() => scrollToSection('udderfall-hero')} className="hover:text-white cursor-pointer">
-                    Home (Udderfall)
-                  </button>
-                </li>
-                <li>
-                  <button onClick={() => scrollToSection('farm-to-table')} className="hover:text-white cursor-pointer">
-                    About Udderfall
-                  </button>
-                </li>
-                <li>
-                  <button onClick={() => scrollToSection('udderfall-yogurt')} className="hover:text-white cursor-pointer">
-                    Yogurt
-                  </button>
-                </li>
-                <li>
-                  <button onClick={() => scrollToSection('udderfall-cheese')} className="hover:text-white cursor-pointer">
-                    Cheese & Mozzarella
-                  </button>
-                </li>
-                <li>
-                  <button onClick={() => scrollToSection('why-udderfall')} className="hover:text-white cursor-pointer">
-                    Why Udderfall
-                  </button>
-                </li>
-                <li>
-                  <button onClick={() => scrollToSection('dairy-journey')} className="hover:text-white cursor-pointer">
-                    Our Dairy Journey
-                  </button>
-                </li>
-                <li>
-                  <button onClick={() => scrollToSection('quality-commitment')} className="hover:text-white cursor-pointer">
-                    Quality & Food Safety
-                  </button>
-                </li>
-                <li>
-                  <button onClick={() => scrollToSection('who-we-serve')} className="hover:text-white cursor-pointer">
-                    Markets We Serve
-                  </button>
-                </li>
-                <li>
-                  <button onClick={() => scrollToSection('distribution-partners')} className="hover:text-white cursor-pointer">
-                    Distribution & Partners
-                  </button>
-                </li>
-                <li>
-                  <button onClick={() => scrollToSection('udderfall-contact')} className="hover:text-white cursor-pointer">
-                    Contact
-                  </button>
-                </li>
-              </ul>
-            </div>
-
-            {/* Business Links */}
-            <div className="lg:col-span-2 space-y-3">
-              <h4 className="text-xs font-bold uppercase tracking-[0.2em] text-[#C89D4B]">
-                Business
-              </h4>
-              <ul className="space-y-2 text-xs text-[#CBDDD2]">
-                <li>
-                  <button onClick={() => setDistributorModalOpen(true)} className="hover:text-white cursor-pointer text-left">
-                    Become a Distributor
-                  </button>
-                </li>
-                <li>
-                  <button onClick={() => openWholesaleQuote('all')} className="hover:text-white cursor-pointer text-left">
-                    Wholesale Supply
-                  </button>
-                </li>
-                <li>
-                  <button onClick={() => openWholesaleQuote('mozzarella')} className="hover:text-white cursor-pointer text-left">
-                    B2B Commercial Supply
-                  </button>
-                </li>
-                <li>
-                  <button onClick={() => scrollToSection('distribution-partners')} className="hover:text-white cursor-pointer text-left">
-                    Partnerships
-                  </button>
-                </li>
-              </ul>
-            </div>
-
-            {/* Contact Details */}
-            <div className="lg:col-span-3 space-y-3">
-              <h4 className="text-xs font-bold uppercase tracking-[0.2em] text-[#C89D4B]">
-                Contact
-              </h4>
-              <div className="space-y-2 text-xs text-[#CBDDD2]">
-                <p>Iseyin, Oyo State, Nigeria</p>
-                <p>
-                  <a href={COMPANY_DETAILS.phoneTel} className="font-mono text-[#E0BA6E] hover:underline">
-                    {COMPANY_DETAILS.phone}
-                  </a>
-                </p>
-                <p>
-                  <a href={`mailto:${COMPANY_DETAILS.email}`} className="text-[#E0BA6E] hover:underline">
-                    {COMPANY_DETAILS.email}
-                  </a>
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-[#7A9385] gap-4">
-            <p>© 2026 Genius Dairy Farms Limited. All Rights Reserved.</p>
-            <div className="flex items-center gap-4">
-              <button onClick={() => onNavigate('home')} className="hover:text-white cursor-pointer">
-                Genius Corporate Portal
-              </button>
-              <span>•</span>
-              <button onClick={() => onNavigate('contact')} className="hover:text-white cursor-pointer">
-                Direct Desk
-              </button>
-            </div>
-          </div>
-        </div>
-      </footer>
 
       {/* =========================================================================
           MODALS

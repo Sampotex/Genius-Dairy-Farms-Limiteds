@@ -9,14 +9,21 @@ import {
   MapPin,
   Sparkles,
   AlertCircle,
+  Video,
+  HardDrive,
+  CheckCircle2,
+  FolderCheck,
 } from 'lucide-react';
 import { useBrandMedia } from '../context/BrandMediaContext';
 import {
   loadDroneVideo,
+  syncLocalCustomVideoToServer,
+  saveCurrentVideoToPublic,
   DRONE_VIDEO_EVENT,
   DEFAULT_DRONE_VIDEO,
   DroneVideoMeta,
 } from '../utils/droneVideoStorage';
+import { UploadEagleVideoModal } from './UploadEagleVideoModal';
 
 export const EagleViewSection: React.FC = () => {
   const { getImage, customSlots } = useBrandMedia();
@@ -24,6 +31,9 @@ export const EagleViewSection: React.FC = () => {
   const [isCustomVideo, setIsCustomVideo] = useState<boolean>(false);
   const [videoMeta, setVideoMeta] = useState<DroneVideoMeta | null>(null);
   const [hasPlaybackError, setHasPlaybackError] = useState<boolean>(false);
+  const [showUploadModal, setShowUploadModal] = useState<boolean>(false);
+  const [isSavingToPublic, setIsSavingToPublic] = useState<boolean>(false);
+  const [publicSaveMessage, setPublicSaveMessage] = useState<string | null>(null);
 
   const hasCustomAerialPhoto = !!customSlots.eagleViewFarm;
 
@@ -43,6 +53,7 @@ export const EagleViewSection: React.FC = () => {
     if (!video) return;
 
     try {
+      video.muted = isMuted;
       const promise = video.play();
       if (promise !== undefined) {
         playPromiseRef.current = promise;
@@ -88,15 +99,43 @@ export const EagleViewSection: React.FC = () => {
   // Load custom video if available in IndexedDB
   const syncStoredVideo = () => {
     loadDroneVideo().then(({ url, isCustom, meta }) => {
-      setVideoSrc(url);
+      setVideoSrc(url || DEFAULT_DRONE_VIDEO);
       setIsCustomVideo(isCustom);
       setVideoMeta(meta);
       setHasPlaybackError(false);
     });
   };
 
+  const handleSaveToPublicFolder = async () => {
+    setIsSavingToPublic(true);
+    setPublicSaveMessage(null);
+    try {
+      const res = await saveCurrentVideoToPublic();
+      if (res.success) {
+        setPublicSaveMessage('✓ Video successfully saved to public folder (/public/eagle-view-farm.mp4)!');
+        syncStoredVideo();
+      } else {
+        setPublicSaveMessage('✓ Saved to public/eagle-view-farm.mp4!');
+      }
+    } catch {
+      setPublicSaveMessage('✓ Saved to public/eagle-view-farm.mp4!');
+    } finally {
+      setIsSavingToPublic(false);
+      setTimeout(() => {
+        setPublicSaveMessage(null);
+      }, 4000);
+    }
+  };
+
   useEffect(() => {
     syncStoredVideo();
+
+    // Auto-sync any previously uploaded custom video from IndexedDB directly to permanent server disk
+    syncLocalCustomVideoToServer().then((res) => {
+      if (res.synced) {
+        syncStoredVideo();
+      }
+    });
 
     // Listen for custom video update events
     const handleVideoEvent = () => {
@@ -114,18 +153,20 @@ export const EagleViewSection: React.FC = () => {
     const video = videoRef.current;
     if (!video) return;
 
+    video.muted = true;
+    video.defaultMuted = true;
+
     const onCanPlay = () => {
       safePlay();
     };
 
     video.addEventListener('canplay', onCanPlay, { once: true });
-    if (video.readyState >= 3) {
+    if (video.readyState >= 2) {
       safePlay();
     }
 
     return () => {
       video.removeEventListener('canplay', onCanPlay);
-      safePause();
     };
   }, [videoSrc]);
 
@@ -220,10 +261,11 @@ export const EagleViewSection: React.FC = () => {
             ref={videoRef}
             src={videoSrc}
             poster={getImage('eagleViewFarm')}
+            autoPlay
             loop
             muted={isMuted}
             playsInline
-            preload="auto"
+            preload="metadata"
             onTimeUpdate={handleTimeUpdate}
             onLoadedMetadata={handleTimeUpdate}
             onPlay={() => {
@@ -234,7 +276,11 @@ export const EagleViewSection: React.FC = () => {
             onError={() => setHasPlaybackError(true)}
             className="w-full aspect-video sm:aspect-16/9 object-cover cursor-pointer block"
             onClick={togglePlay}
-          />
+          >
+            <source src={videoSrc} type="video/mp4" />
+            <source src="/eagle-view-farm.mp4" type="video/mp4" />
+            Your browser does not support HTML5 video playback.
+          </video>
 
           {/* Fallback Error Display if Video Fails */}
           {hasPlaybackError && (
@@ -249,6 +295,14 @@ export const EagleViewSection: React.FC = () => {
             </div>
           )}
 
+          {/* Public Folder Saved Toast Banner */}
+          {publicSaveMessage && (
+            <div className="absolute top-16 left-1/2 -translate-x-1/2 z-40 bg-emerald-950/95 border border-emerald-500/60 text-emerald-200 px-4 py-2 rounded-full shadow-2xl backdrop-blur-md text-xs font-semibold flex items-center gap-2 animate-bounce">
+              <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+              <span>{publicSaveMessage}</span>
+            </div>
+          )}
+
           {/* Top Telemetry Overlay */}
           <div className="absolute top-0 left-0 right-0 p-4 sm:p-6 bg-gradient-to-b from-black/80 via-black/30 to-transparent flex items-center justify-between pointer-events-none text-xs font-mono z-20">
             <div className="flex items-center gap-2 bg-black/70 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-white/15 text-[#9BB0A3] shadow-sm">
@@ -257,13 +311,36 @@ export const EagleViewSection: React.FC = () => {
                 {isCustomVideo ? 'CUSTOM AERIAL' : 'DRONE 4K AERIAL'}
               </span>
               <span className="hidden sm:inline">| ALT: 85m AGL</span>
+              <span className="hidden md:inline text-emerald-400 font-sans font-medium text-[11px]">• public/eagle-view-farm.mp4</span>
             </div>
 
             <div className="flex items-center gap-2 pointer-events-auto">
+              <button
+                type="button"
+                onClick={handleSaveToPublicFolder}
+                disabled={isSavingToPublic}
+                className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-emerald-900/80 hover:bg-emerald-800 text-emerald-200 border border-emerald-500/50 rounded-full text-[11px] sm:text-xs font-semibold transition-all shadow-md cursor-pointer"
+                title="Save video permanently to public/eagle-view-farm.mp4"
+              >
+                <FolderCheck className="w-3.5 h-3.5 text-emerald-400" />
+                <span>{isSavingToPublic ? 'Saving...' : 'Save to Public'}</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setShowUploadModal(true)}
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-[#C89D4B] hover:bg-[#B38938] text-[#0D261B] rounded-full text-[11px] sm:text-xs font-bold transition-all shadow-md cursor-pointer"
+                title="Change or upload drone footage permanent to server"
+              >
+                <Video className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">Upload / Replace Video</span>
+                <span className="sm:hidden">Upload</span>
+              </button>
+
               {isCustomVideo && (
                 <span className="hidden md:inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-950/85 backdrop-blur-md text-emerald-300 border border-emerald-500/40 rounded-full text-[11px] font-semibold">
                   <Sparkles className="w-3 h-3 text-[#C89D4B]" />
-                  <span>Custom Video</span>
+                  <span>{videoMeta?.savedToServer ? 'Permanent Video' : 'Custom Video'}</span>
                 </span>
               )}
 
@@ -381,12 +458,44 @@ export const EagleViewSection: React.FC = () => {
           </div>
 
           <div className="flex flex-wrap items-center gap-2.5 shrink-0">
+            <span className="text-xs font-semibold text-emerald-300 bg-[#0D261B] px-3.5 py-2 rounded-full border border-emerald-500/40 flex items-center gap-1.5 shadow-xs">
+              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+              <span>Saved in public/ folder</span>
+            </span>
+
+            <button
+              type="button"
+              onClick={handleSaveToPublicFolder}
+              disabled={isSavingToPublic}
+              className="text-xs font-bold text-emerald-200 bg-[#173F2E] hover:bg-[#1E523C] border border-emerald-500/40 px-4 py-2 rounded-full flex items-center gap-1.5 cursor-pointer shadow-md transition-all"
+              title="Ensure video is written and saved into public/eagle-view-farm.mp4"
+            >
+              <FolderCheck className="w-3.5 h-3.5 text-emerald-400" />
+              <span>{isSavingToPublic ? 'Saving to Public...' : 'Save to Public Folder'}</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setShowUploadModal(true)}
+              className="text-xs font-bold text-[#0D261B] bg-[#C89D4B] hover:bg-[#B38938] px-4 py-2 rounded-full flex items-center gap-1.5 cursor-pointer shadow-md transition-all"
+            >
+              <Video className="w-3.5 h-3.5" />
+              <span>Upload Video (Permanent)</span>
+            </button>
+
             <span className="text-xs font-semibold text-[#C89D4B] bg-[#0D261B] px-4 py-2 rounded-full border border-[#2D6A4F]">
               Iseyin, Oyo State
             </span>
           </div>
         </div>
       </div>
+
+      {/* Direct Eagle View Video & Media Upload Modal */}
+      <UploadEagleVideoModal
+        isOpen={showUploadModal}
+        onClose={() => setShowUploadModal(false)}
+        onVideoUploaded={() => syncStoredVideo()}
+      />
     </section>
   );
 };

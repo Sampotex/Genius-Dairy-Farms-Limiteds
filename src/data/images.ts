@@ -12,38 +12,36 @@ export const IMAGES = {
   // Brand & Identity
   logo: '/logo.jpg', // Official Genius Dairy Farms Limited circular emblem logo
   geniusDairyLogo: '/genius-dairy-logo.jpg',
-  academyLogo: '/academy-logo.jpg', // Official Genius Dairy Farms Academy circular emblem logo
+  academyLogo: '/academy-logo.jpg', // Official Genius Dairy Academy Limited circular emblem logo
   academyLogoFallback: ACADEMY_LOGO_BASE64,
 
   // Hero & Overview
-  heroDairyCattle:
-    'https://images.unsplash.com/photo-1570042225831-d98fa7577f1e?auto=format&fit=crop&w=2000&q=85', // Healthy dairy cattle in green field
-  corporateFarmFacility:
-    'https://images.unsplash.com/photo-1500595046743-cd271d694d30?auto=format&fit=crop&w=1600&q=80', // Vast green pasture landscape
-  farmPanorama:
-    'https://images.unsplash.com/photo-1516467508483-a7212febe31a?auto=format&fit=crop&w=1600&q=80', // Cattle grazing in sunlight
+  heroDairyCattle: '/hero.jpg', // Official Farm Pasture and herd hero
+  corporateFarmFacility: '/corporateFarmFacility.jpg', // 60-Acre Dairy Complex headquarters
+  farmPanorama: '/farmPanorama.jpg', // Cattle grazing in sunlight panorama
 
   // Cattle & Genetics
   crossbreedCattle: '/1200x794.jpg', // High-yield dairy cow at Iseyin farm
-  defaultInsightFallback: '/1200x794.jpg', // Guaranteed local fallback image for insights
-  grazingHerd:
-    'https://images.unsplash.com/photo-1527153857715-3908f2ae5e81?auto=format&fit=crop&w=1200&q=80', // Pastoral livestock
-  cattleCare:
-    'https://images.unsplash.com/photo-1596733430284-f7437764b1a9?auto=format&fit=crop&w=1200&q=80', // Farmer caring for cattle
+  defaultInsightFallback: '/insight-yield-transformation.jpg', // Guaranteed local fallback image for insights
+
+  // Insights & Technical News Articles (Permanently stored)
+  insightYield: '/insight-yield-transformation.jpg',
+  insightSilage: '/insight-silage-pasture.jpg',
+  insightMilestone: '/insight-ddp-milestone.jpg',
+  insightEducation: '/insight-youth-education.jpg',
+  insightPolicy: '/insight-dairy-policy.jpg',
+  grazingHerd: '/grazingHerd.jpg', // Pastoral livestock grazing herd in lush savanna
+  cattleCare: '/cattleCare.jpg', // Herd health care & veterinary monitoring
 
   // Operations & Milking
-  modernMilking:
-    'https://images.unsplash.com/photo-1527153857715-3908f2ae5e81?auto=format&fit=crop&w=1200&q=80', // Farm production
+  modernMilking: '/hygienicFacility.jpg', // Sanitary production facility
   freshMilkPour:
-    'https://images.unsplash.com/photo-1550583724-b2692b85b150?auto=format&fit=crop&w=1200&q=80', // Fresh wholesome milk
-  hygienicFacility:
-    'https://images.unsplash.com/photo-1589923188900-85dae523342b?auto=format&fit=crop&w=1200&q=80', // Clean production facility
+    'https://images.unsplash.com/photo-1550583724-b2692b85b150?auto=format&fit=crop&w=1200&q=80', // Wholesome fresh farm dairy production
+  hygienicFacility: '/hygienicFacility.jpg', // Clean production facility
 
   // Pasture & Land
-  lushPasture:
-    'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1400&q=80', // Rolling green farmland
-  pastureManagement:
-    'https://images.unsplash.com/photo-1595974482597-4b8da8879bc5?auto=format&fit=crop&w=1200&q=80', // Fodder and grasses
+  lushPasture: '/lushPasture.jpg', // Lush Nigerian savanna pasture and high-tonnage forage
+  pastureManagement: '/pastureManagement.jpg', // Intensive pasture & silage conservation
 
   // Udderfall Products
   udderfallYogurtHero:
@@ -66,26 +64,21 @@ export const IMAGES = {
     'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1200&q=80', // Restaurant and food service commercial application
 
   // Academy & Capacity Development
-  trainingField:
-    'https://images.unsplash.com/photo-1589923188900-85dae523342b?auto=format&fit=crop&w=1200&q=80', // Agricultural instruction
-  studentGroup:
-    'https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=1200&q=80', // Young African professionals learning
-  handsOnDemonstration:
-    'https://images.unsplash.com/photo-1593113598332-cd288d649433?auto=format&fit=crop&w=1200&q=80', // Field demonstration
+  trainingField: '/insight-youth-education.jpg', // Agricultural training field
+  studentGroup: '/academy-logo.jpg', // Official Genius Dairy Academy Limited emblem logo
+  handsOnDemonstration: '/insight-youth-education.jpg', // Practical field demonstration & artificial insemination
 
   // Sustainability & Ecosystem
-  sustainabilityLandscape:
-    'https://images.unsplash.com/photo-1464226184884-fa280b87c399?auto=format&fit=crop&w=1400&q=80', // Natural ecosystem & trees
-  solarAndCleanWater:
-    'https://images.unsplash.com/photo-1508873696983-2df570364425?auto=format&fit=crop&w=1200&q=80', // Clean agricultural stewardship
+  sustainabilityLandscape: '/sustainabilityLandscape.jpg', // Natural agro-ecological landscape
+  solarAndCleanWater: '/solarAndCleanWater.jpg', // Clean solar and borehole water infrastructure
 
   // Founder & Leadership Representation
-  founderPortrait: FOUNDER_IMAGE_BASE64, // Founder & Managing Director Moyosore Olatunde Rafiu at the dairy farm
+  founderPortrait: '/founder.jpg', // Founder & Managing Director Moyosore Olatunde Rafiu at the dairy farm
 
   // Drone & Aerial "Eagle View"
   eagleViewFarm: '/eagle-view-farm.jpg', // Eagle aerial drone view of Genius Dairy Farm in Iseyin, Oyo State
   dairyBarnAerial: '/dairy-barn-aerial.jpg', // High angle aerial of cattle barn & paddocks
 
   // Legal & Corporate Affairs Commission (CAC) Registration
-  cacCertificate: CAC_CERTIFICATE_BASE64, // Official CAC Certificate of Incorporation
+  cacCertificate: '/cac-certificate.jpg', // Official CAC Certificate of Incorporation
 };

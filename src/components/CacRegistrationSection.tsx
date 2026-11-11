@@ -17,7 +17,7 @@ interface CacRegistrationSectionProps {
 export const CacRegistrationSection: React.FC<CacRegistrationSectionProps> = ({
   className = '',
 }) => {
-  const { getImage } = useBrandMedia();
+  const { getImage, openLightbox } = useBrandMedia();
   const certificateUrl = getImage('cacCertificate') || CAC_CERTIFICATE_BASE64;
 
   return (
@@ -38,7 +38,7 @@ export const CacRegistrationSection: React.FC<CacRegistrationSectionProps> = ({
           </h2>
 
           <p className="mt-3 text-base sm:text-lg text-[#4A554F] font-medium leading-relaxed">
-            Genius Dairy Academy Ltd is an officially incorporated entity under Genius Dairy Farms Limited, certified by the Corporate Affairs Commission (CAC).
+            Genius Dairy Academy Limited is an officially incorporated entity under Genius Dairy Farms Limited, certified by the Corporate Affairs Commission (CAC).
           </p>
         </div>
 
@@ -78,7 +78,7 @@ export const CacRegistrationSection: React.FC<CacRegistrationSectionProps> = ({
               <span>Incorporated Entity</span>
             </div>
             <div className="font-heading font-bold text-xs sm:text-sm text-[#143727] leading-snug">
-              Genius Dairy Academy Ltd
+              Genius Dairy Academy Limited
             </div>
             <div className="text-[11px] text-[#75827B] mt-0.5">
               Genius Dairy Farms Group
@@ -113,7 +113,9 @@ export const CacRegistrationSection: React.FC<CacRegistrationSectionProps> = ({
         <div className="flex flex-col items-center justify-center">
           <div
             id="cac-certificate-card"
-            className="relative max-w-md sm:max-w-lg w-full bg-white p-3 sm:p-5 rounded-xs border-2 border-[#D5D1C4] shadow-md transition-all duration-300"
+            onClick={() => openLightbox('cacCertificate')}
+            className="relative max-w-md sm:max-w-lg w-full bg-white p-3 sm:p-5 rounded-xs border-2 border-[#D5D1C4] shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer group"
+            title="Click to view and zoom official CAC Certificate in fullscreen"
           >
             {/* Security watermark badge */}
             <div className="absolute top-5 right-5 z-10 opacity-90 pointer-events-none">
@@ -128,8 +130,8 @@ export const CacRegistrationSection: React.FC<CacRegistrationSectionProps> = ({
               <img
                 id="cac-certificate-image"
                 src={certificateUrl}
-                alt="Official CAC Certificate of Incorporation for Genius Dairy Academy Ltd / Genius Dairy Farms Limited (RC: 8888771)"
-                className="w-full h-auto object-contain"
+                alt="Official CAC Certificate of Incorporation for Genius Dairy Academy Limited / Genius Dairy Farms Limited (RC: 8888771)"
+                className="w-full h-auto object-contain group-hover:scale-102 transition-transform duration-300"
                 loading="lazy"
                 referrerPolicy="no-referrer"
                 onError={(e) => {
@@ -139,6 +141,13 @@ export const CacRegistrationSection: React.FC<CacRegistrationSectionProps> = ({
                   }
                 }}
               />
+
+              {/* Hover overlay hint */}
+              <div className="absolute inset-0 bg-black/25 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                <span className="px-4 py-2 bg-white text-[#143727] text-xs font-bold rounded-full shadow-lg">
+                  Click to Zoom &amp; Inspect Fullscreen
+                </span>
+              </div>
             </div>
 
             {/* Small Caption Required by Specification */}
